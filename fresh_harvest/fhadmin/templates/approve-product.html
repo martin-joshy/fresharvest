@@ -1,0 +1,53 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends 'base.html' %}
+
+<!-- Defing the body  -->
+{%block custombody%}
+
+<div class="page-body">
+  <!-- New Product Add Start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-8 m-auto">
+            <div class="card" data-select2-id="select2-data-33-3v2a">
+              <div class="card-body" data-select2-id="select2-data-32-0fuo">
+                <div class="card-header-2">
+                  <h5>Product Information</h5>
+                </div>
+
+                <form
+                  method="POST"
+                  action=""
+                  class="theme-form theme-form-2 mega-form"
+                >
+                  {% csrf_token %}
+                  <div class="mb-4 row align-items-center"></div>
+                  <div class="mb-4 row align-items-center">
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >Approved:</label
+                    >
+                    <div class="col-sm-9">
+                      {{ form.approved }} {% if form.approved.errors %}
+                      <div class="text-danger">{{ form.approved.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- New Product Add End -->
+
+  <!-- footer Start -->
+
+  <!-- footer En -->
+</div>
+
+{%endblock%}

@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  {% load static %}
+
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Big-market</title>
+<base  />
+
+<link href="https://fonts.googleapis.com/css?family=Nunito:400,400i,300,500,600,700" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,600,700" rel="stylesheet" type="text/css" />
+<meta name="description" content="My Store" />
+<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen" />
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/stylesheet.css' %}" rel="stylesheet">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/jquery.fancybox.css' %}" rel="stylesheet">
+<link href="{% static 'css/animate.css' %}" rel="stylesheet">
+<link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/live_search.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/swiper.min.css' %}" rel="stylesheet" media="screen" />
+<link href="{% static 'css/opencart.css' %}" rel="stylesheet" media="screen" />
+<script src="{% static 'js/swiper.jquery.min.js' %}"></script>
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/jquery.elevatezoom.min.js' %}"></script>
+<script src="{% static 'js/jstree.min.js' %}"></script>
+<script src="{% static 'js/tabs.js' %}"></script>
+<script src="{% static 'js/template.js' %}"></script>
+<script src="{% static 'js/jquery.firstVisitPopup.js' %}"></script>
+<script src="{% static 'js/simpleswap.js' %}"></script>
+<script src="{% static 'js/jquery.fancybox.js' %}"></script>
+<script src="{% static 'js/owl.carousel.js' %}"></script>
+<script src="{% static 'js/wow.min.js' %}"></script>
+<script src="{% static 'js/addthis_widget.js' %}"></script>
+<link href="{% static 'css/owl.transitions.css' %}" rel="stylesheet" media="screen" />
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+
+<!-- HTMX -->
+
+<script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+</script>
+<link href="index.html" rel="canonical" />
+<link href="{%static 'media/images/cart.png'%}" rel="icon" />
+</head>
+
+<body class="common-home lang_en layout-1">
+ 
+<nav id="top">
+<div class="container">
+<div class="row">
+<span class="responsive-bar"><i class="fa fa-bars"></i></span>
+<div class="header-middle-outer closetoggle">
+</div>
+</div>
+</div>
+</nav>
+
+<header>
+<div class="header-block">
+<div class="container">
+<div class="row">
+<div class="header-top-block col-sm-12">
+  <div class="header-top-left pull-left">
+    
+  
+    <input type="hidden" name="code" value="" />
+    <input type="hidden" name="redirect" value="" />
+  </form>
+ 
+  </div>
+  <div class="header-top-right pull-right">
+    {% if user.is_authenticated %} 
+      <div class="login"><a href="{%url 'update-profile'%}"><i class="fa fa-user"></i> Welcome {{ user.username }} !!</a></div>
+        <div class="login"><a href="{% url 'logout' %}"><i class=""></i>Logout</a></div>
+    {% else %}
+      <div class="header-top-right pull-right">
+        <div class="telephone"><a href=""><i class="fa fa-phone"></i>987 654 3210</a></div>
+            <div class="login"><a href="{%url 'login'%}"><i class=""></i>Login</a></div>
+        <div><a href="{%url 'signup'%}">Signup</a></div>
+      </div>
+    {% endif %}
+</div>
+</div>
+<div class="header-bottom-block col-sm-12">
+  <div class="header-bottom-left col-xs-6 col-sm-2 col-md-2 col-lg-2">
+    <div class="header-logo">
+    <div id="logo"><a href=""> <svg width="180" height="38" viewBox="0 0 247 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M31.2749 7.3428C27.4022 7.3428 21.9311 7.66683 19.1352 10.4613C17.9247 11.6718 17.3202 13.6451 17.4771 15.8787C17.4975 16.1737 17.6937 16.425 17.9756 16.5181C18.256 16.6096 18.5641 16.5239 18.7559 16.2987C20.3108 14.4691 22.2435 13.0029 24.5046 11.9406C24.6964 11.8491 24.9231 11.8418 25.1295 11.9145C25.3111 11.9799 25.4535 12.1033 25.5276 12.2618C25.6816 12.5873 25.6322 13.016 25.1207 13.2572C25.0917 13.2717 25.0655 13.2906 25.0365 13.3037C25.0263 13.3081 25.0147 13.3066 25.006 13.311C19.4346 15.9296 16.6954 20.4983 15.4514 25.1964C14.5446 19.314 12.6294 15.8511 10.8202 13.7251C9.51095 12.0279 8.22341 11.1283 7.47943 10.6198C7.34136 10.5253 6.92435 10.2405 6.7514 10.0675C6.46803 9.78417 6.46803 9.3235 6.7514 9.04013C7.03477 8.7582 7.49687 8.7582 7.81218 9.07208C7.88923 9.1404 8.01272 9.22759 8.16966 9.33222L8.29902 9.41941C9.35108 10.1402 11.31 11.4785 13.0479 14.3601C13.2034 14.6173 13.5042 14.7554 13.7963 14.7002C14.0928 14.6479 14.3252 14.4197 14.3834 14.1247C14.7627 12.1877 14.5927 9.31328 12.8649 7.5855C10.069 4.7925 4.59789 4.46847 0.726671 4.46847C0.32553 4.4684 0 4.79393 0 5.195C0 9.06765 0.324032 14.5388 3.11846 17.3347C4.28387 18.5001 6.08147 19.0233 7.86736 19.0233C9.32486 19.0233 10.7533 18.6585 11.8476 18.0264C13.3399 21.1187 14.5316 25.7383 14.5316 32.805C14.5316 33.2061 14.8571 33.5316 15.2582 33.5316C15.6592 33.5316 15.9848 33.2061 15.9848 32.805C15.9848 28.8626 16.6605 24.1311 19.173 20.2366C20.18 21.2205 21.9137 21.8439 23.8347 21.902C23.9306 21.9049 24.0251 21.9063 24.1195 21.9063C26.0711 21.9063 27.796 21.2946 28.8815 20.2076C31.6773 17.4117 31.9999 11.9405 31.9999 8.06783C32.0015 7.66683 31.6774 7.3428 31.2749 7.3428Z" fill="#00B307"/>
+      <path d="M55.488 7.76V10.736H46.048V17.296H53.408V20.272H46.048V30H42.4V7.76H55.488ZM61.5568 14.928C62.0901 14.032 62.7941 13.3387 63.6688 12.848C64.5648 12.336 65.6208 12.08 66.8368 12.08V15.856H65.9088C64.4794 15.856 63.3914 16.2187 62.6448 16.944C61.9194 17.6693 61.5568 18.928 61.5568 20.72V30H57.9088V12.368H61.5568V14.928ZM85.39 20.752C85.39 21.4133 85.3473 22.0107 85.262 22.544H71.79C71.8967 23.952 72.4193 25.0827 73.358 25.936C74.2967 26.7893 75.4487 27.216 76.814 27.216C78.7767 27.216 80.1633 26.3947 80.974 24.752H84.91C84.3767 26.3733 83.406 27.7067 81.998 28.752C80.6113 29.776 78.8833 30.288 76.814 30.288C75.1287 30.288 73.614 29.9147 72.27 29.168C70.9473 28.4 69.902 27.3333 69.134 25.968C68.3873 24.5813 68.014 22.9813 68.014 21.168C68.014 19.3547 68.3767 17.7653 69.102 16.4C69.8487 15.0133 70.8833 13.9467 72.206 13.2C73.55 12.4533 75.086 12.08 76.814 12.08C78.478 12.08 79.9607 12.4427 81.262 13.168C82.5633 13.8933 83.5767 14.9173 84.302 16.24C85.0273 17.5413 85.39 19.0453 85.39 20.752ZM81.582 19.6C81.5607 18.256 81.0807 17.1787 80.142 16.368C79.2033 15.5573 78.0407 15.152 76.654 15.152C75.3953 15.152 74.318 15.5573 73.422 16.368C72.526 17.1573 71.9927 18.2347 71.822 19.6H81.582ZM94.42 30.288C93.0333 30.288 91.7853 30.0427 90.676 29.552C89.588 29.04 88.724 28.3573 88.084 27.504C87.444 26.6293 87.1027 25.6587 87.06 24.592H90.836C90.9 25.3387 91.252 25.968 91.892 26.48C92.5533 26.9707 93.3747 27.216 94.356 27.216C95.38 27.216 96.1693 27.024 96.724 26.64C97.3 26.2347 97.588 25.7227 97.588 25.104C97.588 24.4427 97.268 23.952 96.628 23.632C96.0093 23.312 95.0173 22.96 93.652 22.576C92.3293 22.2133 91.252 21.8613 90.42 21.52C89.588 21.1787 88.8627 20.656 88.244 19.952C87.6467 19.248 87.348 18.32 87.348 17.168C87.348 16.2293 87.6253 15.376 88.18 14.608C88.7347 13.8187 89.524 13.2 90.548 12.752C91.5933 12.304 92.788 12.08 94.132 12.08C96.1373 12.08 97.748 12.592 98.964 13.616C100.201 14.6187 100.863 15.9947 100.948 17.744H97.3C97.236 16.9547 96.916 16.3253 96.34 15.856C95.764 15.3867 94.9853 15.152 94.004 15.152C93.044 15.152 92.308 15.3333 91.796 15.696C91.284 16.0587 91.028 16.5387 91.028 17.136C91.028 17.6053 91.1987 18 91.54 18.32C91.8813 18.64 92.2973 18.896 92.788 19.088C93.2787 19.2587 94.004 19.4827 94.964 19.76C96.244 20.1013 97.2893 20.4533 98.1 20.816C98.932 21.1573 99.6467 21.6693 100.244 22.352C100.841 23.0347 101.151 23.9413 101.172 25.072C101.172 26.0747 100.895 26.9707 100.34 27.76C99.7853 28.5493 98.996 29.168 97.972 29.616C96.9693 30.064 95.7853 30.288 94.42 30.288ZM113.274 12.08C114.618 12.08 115.812 12.368 116.858 12.944C117.924 13.52 118.756 14.3733 119.354 15.504C119.972 16.6347 120.282 18 120.282 19.6V30H116.666V20.144C116.666 18.5653 116.271 17.36 115.482 16.528C114.692 15.6747 113.615 15.248 112.25 15.248C110.884 15.248 109.796 15.6747 108.986 16.528C108.196 17.36 107.802 18.5653 107.802 20.144V30H104.154V6.32H107.802V14.416C108.42 13.6693 109.199 13.0933 110.138 12.688C111.098 12.2827 112.143 12.08 113.274 12.08ZM149.087 7.76V30H145.439V20.272H134.975V30H131.327V7.76H134.975V17.296H145.439V7.76H149.087ZM151.714 21.104C151.714 19.3333 152.077 17.7653 152.802 16.4C153.549 15.0347 154.551 13.9787 155.81 13.232C157.09 12.464 158.498 12.08 160.034 12.08C161.421 12.08 162.626 12.3573 163.65 12.912C164.695 13.4453 165.527 14.1173 166.146 14.928V12.368H169.826V30H166.146V27.376C165.527 28.208 164.685 28.9013 163.618 29.456C162.551 30.0107 161.335 30.288 159.97 30.288C158.455 30.288 157.069 29.904 155.81 29.136C154.551 28.3467 153.549 27.2587 152.802 25.872C152.077 24.464 151.714 22.8747 151.714 21.104ZM166.146 21.168C166.146 19.952 165.89 18.896 165.378 18C164.887 17.104 164.237 16.4213 163.426 15.952C162.615 15.4827 161.741 15.248 160.802 15.248C159.863 15.248 158.989 15.4827 158.178 15.952C157.367 16.4 156.706 17.072 156.194 17.968C155.703 18.8427 155.458 19.888 155.458 21.104C155.458 22.32 155.703 23.3867 156.194 24.304C156.706 25.2213 157.367 25.9253 158.178 26.416C159.01 26.8853 159.885 27.12 160.802 27.12C161.741 27.12 162.615 26.8853 163.426 26.416C164.237 25.9467 164.887 25.264 165.378 24.368C165.89 23.4507 166.146 22.384 166.146 21.168ZM177.306 14.928C177.839 14.032 178.543 13.3387 179.418 12.848C180.314 12.336 181.37 12.08 182.586 12.08V15.856H181.658C180.228 15.856 179.14 16.2187 178.394 16.944C177.668 17.6693 177.306 18.928 177.306 20.72V30H173.658V12.368H177.306V14.928ZM191.795 26.736L196.787 12.368H200.659L193.939 30H189.587L182.899 12.368H186.803L191.795 26.736ZM218.616 20.752C218.616 21.4133 218.574 22.0107 218.488 22.544H205.016C205.123 23.952 205.646 25.0827 206.584 25.936C207.523 26.7893 208.675 27.216 210.04 27.216C212.003 27.216 213.39 26.3947 214.2 24.752H218.136C217.603 26.3733 216.632 27.7067 215.224 28.752C213.838 29.776 212.11 30.288 210.04 30.288C208.355 30.288 206.84 29.9147 205.496 29.168C204.174 28.4 203.128 27.3333 202.36 25.968C201.614 24.5813 201.24 22.9813 201.24 21.168C201.24 19.3547 201.603 17.7653 202.328 16.4C203.075 15.0133 204.11 13.9467 205.432 13.2C206.776 12.4533 208.312 12.08 210.04 12.08C211.704 12.08 213.187 12.4427 214.488 13.168C215.79 13.8933 216.803 14.9173 217.528 16.24C218.254 17.5413 218.616 19.0453 218.616 20.752ZM214.808 19.6C214.787 18.256 214.307 17.1787 213.368 16.368C212.43 15.5573 211.267 15.152 209.88 15.152C208.622 15.152 207.544 15.5573 206.648 16.368C205.752 17.1573 205.219 18.2347 205.048 19.6H214.808ZM227.646 30.288C226.26 30.288 225.012 30.0427 223.902 29.552C222.814 29.04 221.95 28.3573 221.31 27.504C220.67 26.6293 220.329 25.6587 220.286 24.592H224.062C224.126 25.3387 224.478 25.968 225.118 26.48C225.78 26.9707 226.601 27.216 227.582 27.216C228.606 27.216 229.396 27.024 229.95 26.64C230.526 26.2347 230.814 25.7227 230.814 25.104C230.814 24.4427 230.494 23.952 229.854 23.632C229.236 23.312 228.244 22.96 226.878 22.576C225.556 22.2133 224.478 21.8613 223.646 21.52C222.814 21.1787 222.089 20.656 221.47 19.952C220.873 19.248 220.574 18.32 220.574 17.168C220.574 16.2293 220.852 15.376 221.406 14.608C221.961 13.8187 222.75 13.2 223.774 12.752C224.82 12.304 226.014 12.08 227.358 12.08C229.364 12.08 230.974 12.592 232.19 13.616C233.428 14.6187 234.089 15.9947 234.174 17.744H230.526C230.462 16.9547 230.142 16.3253 229.566 15.856C228.99 15.3867 228.212 15.152 227.23 15.152C226.27 15.152 225.534 15.3333 225.022 15.696C224.51 16.0587 224.254 16.5387 224.254 17.136C224.254 17.6053 224.425 18 224.766 18.32C225.108 18.64 225.524 18.896 226.014 19.088C226.505 19.2587 227.23 19.4827 228.19 19.76C229.47 20.1013 230.516 20.4533 231.326 20.816C232.158 21.1573 232.873 21.6693 233.47 22.352C234.068 23.0347 234.377 23.9413 234.398 25.072C234.398 26.0747 234.121 26.9707 233.566 27.76C233.012 28.5493 232.222 29.168 231.198 29.616C230.196 30.064 229.012 30.288 227.646 30.288ZM241.636 15.344V25.104C241.636 25.7653 241.785 26.2453 242.084 26.544C242.404 26.8213 242.937 26.96 243.684 26.96H245.924V30H243.044C241.401 30 240.143 29.616 239.268 28.848C238.393 28.08 237.956 26.832 237.956 25.104V15.344H235.876V12.368H237.956V7.984H241.636V12.368H245.924V15.344H241.636Z" fill="#002603"/>
+      </svg>
+      </a></div>
+    </div>
+  </div>
+  <div class="header-bottom-right col-xs-6 col-sm-10 col-md-10 col-lg-10">
+    <div class="header-cart"><div id="cart" class="btn-group btn-block cart_block">
+   <button type="button" data-toggle="" data-loading-text="Loading..." class="btn btn-inverse btn-block btn-lg dropdown-toggle"><span class="cart-text"><a href="{%url 'cart-summary'%}">My basket</a></span><span class="cart-total">Items </span><span class="cart-total-res">0</span>
+  </button>
+  <a href="{%url 'cart-summary'%}" class="addtocart btn">
+<span class="cart-text">My basket</span>
+<span class="cart-total-res">0</span>
+</a>
+  <ul class="dropdown-menu pull-right">
+        <li>
+      <p class="text-center">Your shopping cart is empty!</p>
+    </li>
+      </ul>
+</div>
+</div>
+    <div class="header-link-search">
+    <div class="header-search"><div class="actions">
+    <button type="submit" title="Search" class="action search"  id="head-search"></button>
+</div>
+<div id="search" class="input-group">
+  <input type="text" id="search-input" name="search" value="" placeholder="Search" class="form-control input-lg" />
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-default btn-lg">Search</button>
+  </span>
+</div></div>
+      <div class="header-link">
+           <ul class="list-unstyled">
+            <li><a href="{% url 'store' %}">Home</a></li>
+            <li><a href="#">Shop</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+
+
+      </div>
+    <div class="header-menu">
+    <div class="responsive-menubar-block">
+      <span>Shop By<br/> Category</span>
+    <span class="menu-bar collapsed" data-target="#menu" data-toggle="collapse"><i class="fa fa-bars"></i></span>
+    </div>
+    <nav id="menu" class="navbar collapse">
+<div class="navbar-header"> <span id="category" class="visible-xs">Top categories</span>
+  <button type="button" class="btn btn-navbar navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+  <ul class="nav navbar-nav main-navigation">
+   
+    <li>
+                            
+      <a class="dropdown-item" href="{% url 'store' %}"> All </a>
+  
+  </li>
+  {%for category in all_categories%}
+  <li>
+      <a class="dropdown-item" href="{{category.get_absolute_url}}"> {{category.name | capfirst}} </a>
+  </li>
+        
+  {%endfor%}
+  </ul>
+  </div>
+
+</nav>
+
+
+ 
+    </div>
+ </div>
+</div>
+</div>
+</div>
+</div>
+<div class="header-static-block">
+<div class="container">
+<div class="row">
+<div class="icon-block">
+  <div class="home_icon">
+  <a href=""><i class="fa fa-home"></i>Home</a>
+  </div>
+  <div class="search_icon">
+  <a href=""><i class="fa fa-search"></i>Search</a>
+  </div>
+  <div class="cart_icon">
+
+  </div>
+  <div class="login_icon">
+        <a href=""><i class="fa fa-user"></i>Login</a>
+      </div>
+  <div class="telephone_icon">
+    <a href=""><i class="fa fa-phone"></i>Contact Us</a>
+  </div>
+</div>
+ </div>
+</div>
+</div>
+
+<!-- This is to display an messages to the user, Common to most of the template-->
+  {% for message in messages %} 
+      {% if message.tags != 'info' %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible"><i class="fa fa-check-circle"></i> {{ message }}</div>
+      {% endif %}
+  {% endfor %}
+
+</header>
+
+
+{% block for_common_body %}
+<h1 style="background-color: aqua;">This is a custom block</h1>
+{% endblock %}
+
+
+</script>
+<footer>
+  <div id="footer">
+    <div class="container">
+        <div class="footer_block">
+       <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-3 column myaccount">
+          <h4>My Account</h4>
+          <h5 class="collapsed" data-target="#dropdown-account" data-toggle="collapse">My Account <span class="icon"></span></h5>
+          <ul class="list-unstyled collapse" id="dropdown-account">
+            <li><a href="indexe223.html?route=account/account">My Account</a></li>
+            <li><a href="indexe223.html?route=account/order">Order History</a></li>
+            <li><a href="indexe223.html?route=account/wishlist">Wish List</a></li>
+            <li><a href="indexe223.html?route=account/newsletter">Newsletter</a></li>
+            <li><a href="index2724.html?route=information/contact">Contact Us</a></li>
+          </ul>
+        </div>
+                <div class="col-xs-12 col-sm-12 col-md-3 column information">
+          <h4>Information</h4>
+          <h5 class="collapsed" data-target="#dropdown-information" data-toggle="collapse">Information <span class="icon"></span></h5>
+          <ul class="list-unstyled collapse" id="dropdown-information">
+                        <li><a href="about_us.html">About Us</a></li>
+                        <li><a href="delivery.html">Delivery Information</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="index71ba.html?route=account/return/add">Returns</a></li>
+          </ul>
+        </div>
+                  <div class="col-xs-12 col-sm-12 col-md-3 column customlink">
+          <h4>Customlink</h4>
+          <h5 class="collapsed" data-target="#dropdown-customlink" data-toggle="collapse">Customlink<span class="icon"></span></h5>
+          <ul class="list-unstyled collapse" id="dropdown-customlink">
+            <li><a href="#">Career</a></li>
+            <li><a href="index8816.html?route=information/information&amp;information_id=4">About Us</a></li>
+            <li><a href="#">Policy</a></li>
+            <li><a href="indexe223.html?route=account/newsletter">Newsletter</a></li>
+            <li><a href="index2724.html?route=information/contact">Contact Us</a></li>
+          </ul>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-12 col-md-3 column extra">
+          <h4>Extras</h4>
+          <h5 class="collapsed" data-target="#dropdown-extra" data-toggle="collapse">Extras <span class="icon"></span></h5>
+          <ul class="list-unstyled collapse" id="dropdown-extra">
+            <li><a href="indexd773.html?route=product/manufacturer">Brands</a></li>
+            <li><a href="index4dd2.html?route=account/voucher">Gift Certificates</a></li>
+            <li><a href="index3d18.html?route=affiliate/login">Affiliate</a></li>
+            <li><a href="indexf110.html?route=product/special">Specials</a></li>
+            <li><a href="index7cb2.html?route=information/sitemap">Site Map</a></li>
+          </ul>
+        </div>
+         <div class="col-xs-12 col-sm-12 col-md-3 column contacts">   <div class="footer-common collapsible mobile-collapsible">
+  <div class="footer-static">
+    <h4>Contacts </h4>
+    <h5 class="collapsed" data-target="#dropdown-contact" data-toggle="collapse">Contacts <span class="icon"></span> </h5>
+    <ul class="clearfix collapse" id="dropdown-contact">
+      <li class="item">600, Big market Site Designs<br> custom Boltacusta avenue apt.<br>Mesa,California</li>
+      <li class="item email"><a href="mailto:info@customdesign.com?Subject=Feedback&amp;Body=start">info@customdesign.com</a></li>
+      <li class="item call">(+91) 12-3456-7890</li>
+    </ul>
+  </div>
+</div>
+
+ </div>
+         </div>
+   
+</script>
+
+
+<div id="subscribe-me" class="modal animated fade" role="dialog" data-keyboard="true" tabindex="-1">
+<div class="newsletter-popup">
+<div class="newsletter-popup-static newsletter-popup-top">
+<div class="popup-text">
+<div class="popup-title">special offer <span></span></div>
+<div class="popup-desc">
+<div>32% Instant Discount*</div>
+<div>Code: <span>BMLESS32</span></div>
+</div>
+</div>
+<div class="newsform">    
+    <form method="post" class="form-horizontal" id="form-newsletter-popup">
+        <div class="form-group" id="form-newsletter-error-popup">
+            <div id="newsletter-emailp">
+                <input type="email" class="form-control input-lg" name="txtemailpopup" id="txtemailpopup" value="" placeholder="Enter your email address"/>
+            <button type="submit" onclick="return regNewsletterpopup();" class="btn btn-default btn-lg">                    
+                    Subscribe
+                </button>
+            </div>
+            <div class="col-xs-12">
+                
+                <label class="checkme"><input type="checkbox" value="" id="checkme"/>Do not show again</label>
+            </div>
+        </div>
+    </form>
+    
+</div>
+</div>
+</div>
+</div>
+
+
+<div class="newsletters">
+<div class="news-head">
+<h4>Subscribe for our offer news</h4>
+
+</div>
+<div class="news-form">
+    
+    <form method="post" class="form-horizontal" id="form-newsletter">
+        <div class="form-group" id="form-newsletter-error">
+               
+             <div id="newsletter-email">
+                <input type="email" name="txtemail" id="txtemail" value="" placeholder="Enter your email address" class="form-control"/>
+               <button type="submit" onclick="return regNewsletter();" id="email-popup-submit" class="btn btn-default btn-lg">                   
+                    Subscribe       </button>
+           
+            </div>
+                
+        </div>
+    </form>
+    
+</div>  
+</div>  
+ </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+       <div class="footer-bottom-down col-md-12 col-sm-12 col-xs-12">  <div class="footer-bottom-section1 footer_payment section col-md-4 col-xs-12">
+  <div class="payment">
+    <div class="section-heading">payment option </div>
+    <ul class="payment_icon">
+      <li><a class="mastercard" title="mastercard" href="#"><i class="fa fa-cc-mastercard" aria-hidden="true"></i></a></li>
+      <li><a class="discover" title="discover" href="#"><i class="fa fa-cc-discover" aria-hidden="true"></i></a></li>
+      <li><a class="amex" title="amex" href="#"><i class="fa fa-cc-amex" aria-hidden="true"></i></a></li>
+      <li><a class="paypal" title="paypal" href="#"><i class="fa fa-cc-paypal" aria-hidden="true"></i></a></li>
+      <li><a class="visa" title="visa" href="#"><i class="fa fa-cc-visa" aria-hidden="true"></i></a></li>  
+    </ul>
+  </div>
+</div>
+
+
+
+
+  <div class="section app col-md-4 col-xs-12">
+  <div class="section-heading">download app</div>
+  <ul class="app-icon">
+    <li><a href="#" title="playstore"><img src="{%static 'media/catalog/play-store.png'%}" alt="playstore" class="img-responsive"></a></li>
+    <li><a href="#" title="appstore"><img src="{%static 'media/c/catalog/app-store.png'%}" alt="appstore" class="img-responsive"></a></li>
+  </ul>
+</div>
+
+  <div class="footer-bottom-section3 footer_social section col-md-4 col-xs-12">
+  <div class="section-heading">Social media</div>
+  <ul class="social-icon">
+    <li><a class="facebook" title="Facebook" href="#"><i class="fa fa-facebook"> </i>&nbsp;</a></li>
+    <li><a class="twitter" title="Twitter" href="#"><i class="fa fa-twitter"> </i>&nbsp;</a></li>
+    <li><a class="instagram" title="Instagram" href="#"><i class="fa fa-instagram"> </i>&nbsp;</a></li>
+    <li><a class="rss" title="RSS" href="#"><i class="fa fa-rss"> </i>&nbsp;</a></li>
+    <li><a class="youtube" title="youtube" href="#"><i class="fa fa-youtube"> </i>&nbsp;</a></li>
+  </ul>
+</div>
+
+ </div>
+
+        <div class="footer-bottom">
+          <div class="copy-right col-md-12 col-sm-12 col-xs-12">
+            <div id="powered">Powered By <a href="http://www.opencart.com/">OpenCart</a> Big-market &copy; 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+        
+            <script>
+                var live_search = {
+					selector: '#search input[name=\'search\']',
+					text_no_matches: 'There is no product that matches the search criteria.',
+					height: '50px'
+				}
+
+				$(document).ready(function() {
+					var html = '';
+					html += '<div class="live-search">';
+					html += '	<ul>';
+					html += '	</ul>';
+					html += '<div class="result-text"></div>';
+					html += '</div>';
+
+				$(live_search.selector).parent().after(html);
+				//	$(live_search.selector).after(html);
+
+					$(live_search.selector).autocomplete({
+						'source': function(request, response) {
+							var filter_name = $(live_search.selector).val();
+							var cat_id = 0;
+							var module_live_search_min_length = '1';
+							if (filter_name.length < module_live_search_min_length) {
+								$('.live-search').css('display','none');
+							}
+							else{
+								var html = '';
+								html += '<li style="text-align: center;height:10px;">';
+								html +=	'<img class="loading" src="catalog/view/theme/oc01/image/loading.gif" />';
+								html +=	'</li>';
+								$('.live-search ul').html(html);
+								$('.live-search').css('display','block');
+
+								$.ajax({
+									url: 'index.php?route=extension/module/live_search&filter_name=' +  encodeURIComponent(filter_name),
+									dataType: 'json',
+									success: function(result) {
+										var products = result.products;
+										$('.live-search ul li').remove();
+										$('.result-text').html('');
+										if (!$.isEmptyObject(products)) {
+											var show_image = 1;
+											var show_price = 1;
+											var show_description = 1;
+											$('.result-text').html('<a href="https://opencart.lionode.com/bigmarket/oc012019/oc01/index.php?route=product/search&amp;search='+filter_name+'" class="view-all-results">   View all results    ('+result.total+')</a>');
+
+											$.each(products, function(index,product) {
+												var html = '';
+
+												html += '<li>';
+												html += '<a href="' + product.url + '" title="' + product.name + '">';
+												if(product.image && show_image){
+													html += '	<div class="product-image"><img alt="' + product.name + '" src="' + product.image + '"></div>';
+												}
+												html += '	<div class="product-name">' + product.name ;
+												if(show_description){
+													html += '<p>' + product.extra_info + '</p>';
+												}
+												html += '</div>';
+												if(show_price){
+													if (product.special) {
+														html += '	<div class="product-price"><span class="special">' + product.price + '</span><span class="price">' + product.special + '</span></div>';
+													} else {
+														html += '	<div class="product-price"><span class="price">' + product.price + '</span></div>';
+													}
+												}
+												html += '<span style="clear:both"></span>';
+												html += '</a>';
+												html += '<div class="button-group"><button type="button" class="btn btn-primary btn-block ajaxcart" onclick="addtocart.add('+ product.product_id +')" >Add</button><div>';
+												html += '</li>';
+												$('.live-search ul').append(html);
+											});
+										} else {
+											var html = '';
+											html += '<li style="text-align: center;height:10px;">';
+											html +=	live_search.text_no_matches;
+											html +=	'</li>';
+
+											$('.live-search ul').html(html);
+										}
+										$('.live-search').css('display','block');
+										return false;
+									}
+								});
+							}
+						},
+						'select': function(product) {
+							$(live_search.selector).val(product.name);
+						}
+					});
+
+					$(document).bind( "mouseup touchend", function(e){
+					  var container = $('.live-search');
+					  if (!container.is(e.target) && container.has(e.target).length === 0)
+					  {
+					    container.hide();
+					  }
+					});
+				});
+			//--></script>
+		
+
+<script>
+$('button[id^=\'button-upload\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$('.text-danger').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+</script>
+<script>
+$(document).ready(function(){
+
+$('.productpage-carousel').owlCarousel({
+    items: 5,
+    autoPlay: false,
+    singleItem: false,
+    navigation: true,
+    pagination: false,
+    itemsDesktop : [1199,4],
+    itemsDesktopSmall : [991,3],
+    itemsTablet : [479,2],
+    itemsMobile : [319,1]
+  });
+});
+function addtoCart(product_id){
+          $.ajax({
+            url: 'index.php?route=checkout/cart/add',
+            type: 'post',
+            data: $('#product-' + product_id + ' input[type=\'text\'],#product-' + product_id + ' input[type=\'number\'], #product-' + product_id + ' input[type=\'hidden\'], #product-' + product_id + ' input[type=\'radio\']:checked, #product-' + product_id + ' input[type=\'checkbox\']:checked, #product-' + product_id + ' select, #product-' + product_id + ' textarea'),
+            dataType: 'json',
+            beforeSend: function() {
+              $('#add-cart-'+ product_id).button('loading');
+            },
+            complete: function() {
+              $('#add-cart-'+ product_id).button('reset');
+            },
+            success: function(json) {
+              $('.alert, .text-danger').remove();
+              $('.form-group').removeClass('has-error');
+
+              if (json['error']) {
+                if (json['error']['option']) {
+                  for (i in json['error']['option']) {
+                    var element = $('#input-option' + i.replace('_', '-'));
+
+                    if (element.parent().hasClass('input-group')) {
+                      element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                    } else {
+                      element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                    }
+                  }
+                }
+
+                if (json['error']['recurring']) {
+                  $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
+                }
+
+                // Highlight any found errors
+                $('.text-danger').parent().addClass('has-error');
+              }
+
+              if (json['success']) {
+
+$('.breadcrumb').after('<div class="alertmsg"><div class="alert alert-success alert-dismissible">' + json['success'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div></div>');
+ 			$('#cart > .btn').addClass('active');
+            $('#cart > .btn').html('<span class="cart-text">My basket</span><span class="cart-total">Item ' + json['total'] + '</span><span class="cart-total-res">' + json['total'] +'</span>');
+
+$('.alertmsg').delay(1500).fadeOut();
+
+        //$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+        $('#cart > ul').load('index1e1c.html?route=common/cart/info%20ul%20li');
+        	$("button.close").click(function() {
+                        $(".alertmsg").remove()
+                    });
+              }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+              alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+          });
+        }
+</script>
+
+<script>
+  document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+  })
+  
+</script>
+
+
+
+
+
+
+
+

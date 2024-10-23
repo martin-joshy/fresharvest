@@ -1,0 +1,229 @@
+{% load static %}
+
+<div class="row" id="result">
+  <div class="col-xs-12 col-sm-8">
+    <form action="" method="post" enctype="multipart/form-data">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <td class="text-center">Image</td>
+              <td class="text-left">Product Name</td>
+              <td class="text-left">Quantity</td>
+              <td class="text-right">Unit Price</td>
+              <td class="text-right">Total</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+            <tr>
+              <td class="text-center">
+                <a href="{{item.product.get_absolute_url}}">
+                  <img
+                    height="50"
+                    width="50"
+                    src="{%static 'media/images/small/'|add:item.product.get_file_name%}"
+                    alt="{{item.product.title}}"
+                    class="img-thumbnail"
+                  />
+                </a>
+              </td>
+              <td class="text-left">
+                <a href="{{item.product.get_absolute_url}}"
+                  >{{item.product.title}}</a
+                >
+              </td>
+              <td class="text-left">
+                <div class="input-group btn-block" style="max-width: 200px">
+                  {%if item.product.current_stock == 0%} {%else%}
+                  <input
+                    type="number"
+                    name="quantity_{{ item.id }}"
+                    placeholder="{{item.quantity}}"
+                    value=""
+                    class="form-control"
+                    min="1"
+                    max="10"
+                    hx-post="{%url 'cart-update' item.id%}"
+                    hx-trigger="keyup delay:500ms"
+                    hx-target="#result"
+                  />
+                  <span class="input-group-btn">
+                    {%endif%} {%if item.product.current_stock == 0%}
+
+                    <p style="color: red">Out of Stock</p>
+
+                    {%else%} {%endif%}
+                    <a href="{%url 'cart-delete' item.id%}">
+                      <button
+                        type="button"
+                        data-toggle="tooltip"
+                        title=""
+                        class="btn btn-danger delete"
+                        data-original-title="Remove"
+                      >
+                        <i class="fa fa-times-circle"></i>
+                      </button>
+                    </a>
+                  </span>
+                </div>
+              </td>
+              {%if product.get_discounted_price %}
+              <td class="text-right">
+                INR {{item.product.get_discounted_price}} <br />
+                <span style="font-size: smaller"
+                  ><strike style="color: gray"
+                    >INR {{item.product.price}}</strike
+                  >
+                  <span style="color: green"
+                    >({{item.product.get_highest_discount_percentage}} %)
+                  </span>
+                </span>
+
+                <span class="price-tax"></span>
+              </td>
+              {%else%}
+              <td class="text-right">INR {{item.product.price}}</td>
+              {%endif%} {%if product.get_discounted_price %}
+              <td class="text-right">
+                INR {{item.total_price_after_discount|floatformat:2}} <br />
+                <span style="font-size: smaller"
+                  ><strike style="color: gray">
+                    INR
+                    {{item.total_price_before_discount|floatformat:2}}</strike
+                  >
+                  <span style="color: green"
+                    >({{item.product.get_highest_discount_percentage}} %)
+                  </span>
+                </span>
+              </td>
+              {%else%}
+              <td class="text-right">
+                INR {{item.total_price_after_discount|floatformat:2}}
+              </td>
+              {%endif%}
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel-group col-xs-12 col-sm-4" id="accordion">
+    <!-- Coupon Panel -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a
+            href="#collapse-coupon"
+            class="accordion-toggle"
+            data-toggle="collapse"
+            data-parent="#accordion"
+            >Use Coupon Code <i class="fa fa-caret-down"></i
+          ></a>
+        </h4>
+      </div>
+      <div id="collapse-coupon" class="panel-collapse collapse">
+        <div class="panel-body">
+          <!-- Coupon Code Form -->
+
+          <form
+            id="coupon-form"
+            method="post"
+            hx-post="{% url 'apply-coupon' %}"
+            hx-target="#result"
+          >
+            <div class="input-group">
+              <!-- prettier-ignore -->
+              {%if messages%}
+              <ul class="messages">
+                {% for message in messages %}
+                <!-- prettier-ignore -->
+                {%if 'info-danger' in message.tags%}
+                <p style="color: red">{{ message }}</p>
+                {%endif%}
+                <!-- prettier-ignore -->
+                {%if 'info-success' in message.tags%}
+                <p style="color: green">{{ message }}</p>
+                {%endif%}
+                <!-- prettier-ignore -->
+                {%endfor%}
+              </ul>
+              {%endif%}
+              <input
+                type="text"
+                name="coupon"
+                value=""
+                placeholder="Enter your coupon here"
+                id="input-coupon"
+                class="form-control"
+              />
+              {% if user.cart.first.coupon %}
+              <a
+                hx-delete="{%url 'delete-coupon' %}"
+                hx-target="#result"
+                class="btn btn-success"
+                >X {{ user.cart.first.coupon.coupon_code }}</a
+              >
+              {% endif %}
+              <span class="input-group-btn">
+                <input
+                  type="submit"
+                  value="Apply Coupon"
+                  id="button-coupon"
+                  data-loading-text="Loading..."
+                  class="btn btn-primary"
+                />
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 col-sm-4 col-sm-offset-8">
+    <!-- Grand Total Table -->
+    <table class="table table-bordered grand-total">
+      <tbody>
+        <tr>
+          <td class="text-right"><strong>Sub-Total:</strong></td>
+          <td class="text-right">
+            INR {{grand_total_before_discount|floatformat:2}}
+          </td>
+        </tr>
+        {%if user.cart.first.coupon %}
+        <tr>
+          <td class="text-right"><strong>Coupon:</strong></td>
+          <td style="color: green" class="text-right">
+            - INR {{ user.cart.first.coupon.discount_price |floatformat:2 }}
+          </td>
+        </tr>
+        {%else%} {%endif%}
+        <tr>
+          <td class="text-right"><strong>Discount:</strong></td>
+          <td style="color: green" class="text-right">
+            - INR {{total_promotional_discount|floatformat:2}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right"><strong>Total:</strong></td>
+          <td class="text-right">INR {{grand_total|floatformat:2}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Buttons -->
+  <div class="buttons clearfix">
+    <div class="pull-left">
+      <a href="{%url 'store'%}" class="btn btn-default">Continue Shopping</a>
+    </div>
+    {%if grand_total != 0%}
+    <div class="pull-right">
+      <a href="{%url 'checkout'%}" class="btn btn-primary">Checkout</a>
+    </div>
+    {%endif%}
+  </div>
+</div>

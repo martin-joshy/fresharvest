@@ -1,0 +1,68 @@
+<!-- Inherits the nav bar and the footer -->
+{% extends "./base.html" %} {% block for_common_body %}
+
+<div id="account-login" class="container">
+  <div class="row">
+    <div id="content" class="col-sm-9">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="well">
+            <h2>New Customer</h2>
+            <p><strong>Register Account</strong></p>
+            <p>
+              By creating an account, you will be able to shop faster, be up to
+              date on an order's status, and keep track of the orders you have
+              previously made.
+            </p>
+            <a href="{%url 'signup'%}" class="btn btn-primary">Continue</a>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="well">
+            <h2>Returning Customer</h2>
+            <p><strong>I am a returning customer</strong></p>
+            <form action="" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label class="control-label" for="input-username"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  name="username"
+                  value=""
+                  placeholder="E-Mail Address"
+                  id="input-username"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-password"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  name="password"
+                  value=""
+                  placeholder="Password"
+                  id="input-password"
+                  class="form-control"
+                />
+                <a href="{%url 'reset_password'%}">Forgotten Password</a><br />
+                <a href="{%url 'phone-number-otp'%}">Login with OTP</a>
+              </div>
+              {% for message in messages %} {% if message.tags == 'info' %}
+              <p class="{% if 'info' in message.tags %}text-danger{% endif %}">
+                {{ message }}
+              </p>
+              {% endif %} {% endfor %}
+              <input type="submit" value="Login" class="btn btn-primary" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

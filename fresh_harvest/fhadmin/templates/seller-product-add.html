@@ -1,0 +1,84 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends 'base.html' %}
+
+<!-- Defing the body  -->
+{%block custombody%}
+
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-8 m-auto">
+            <div class="card" data-select2-id="select2-data-33-3v2a">
+              <div class="card-body" data-select2-id="select2-data-32-0fuo">
+                <div class="card-header-2">
+                  <h5>Add your Product</h5>
+                </div>
+
+                <form
+                  method="POST"
+                  action=""
+                  class="theme-form theme-form-2 mega-form"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+
+                  <div
+                    class="mb-4 row align-items-center"
+                    data-select2-id="select2-data-41-0oly"
+                  >
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >{{ form.product.label_tag }}</label
+                    >
+                    <div
+                      class="col-sm-9"
+                      data-select2-id="select2-data-40-sxcx"
+                    >
+                      {{ form.product }} {% if form.product.errors %}
+                      <div class="text-danger">{{ form.product.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-4 row align-items-center">
+                    <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                      >{{ form.stock.label_tag }}</label
+                    >
+                    <div class="col-md-9 col-lg-10">
+                      {{ form.stock }} {% if form.stock.errors %}
+                      <div class="text-danger">{{ form.stock.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-4 col align-items-center pt-4">
+                    <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                      >{{ form.description.label_tag }}</label
+                    >
+                    <div class="col-12 pt-2">
+                      {{ form.description }} {% if form.description.errors %}
+                      <div class="text-danger">
+                        {{ form.description.errors }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    data-bs-original-title=""
+                    title=""
+                  >
+                    Create Product
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%endblock%}

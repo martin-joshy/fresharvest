@@ -1,0 +1,62 @@
+{% extends './store/base.html'%}
+{% load static %}
+
+
+
+
+{% block for_common_body %}
+<div id="account-forgotten" class="container ">
+    <div class="row">
+        <div id="content" class="col-sm-9 ">
+            <p>Enter the Phone Number associated with your account. Click submit to have otp sent to you</p>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Your Phone Number </legend>
+                    
+                    <div class="form-group required">
+                        <label class="col-sm-2 control-label" for="id_phone_number">Phone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="phone_number" placeholder="Phone Number" id="id_phone_number"
+                                class="form-control " required>
+                            <div>
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                    {% if message.tags == 'error' %} 
+                                        <div class="text-danger">
+                                            {{ message }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        <div class="radio-box">
+                            <label for="methodOtpSms">SMS:</label>
+                            <input type="radio" name="methodOtp" id="methodOtpSms" value="methodOtpSms">
+                    
+                            <label for="methodOtpWhatsapp">WhatsApp:</label>
+                            <input type="radio" name="methodOtp" id="methodOtpWhatsapp" value="methodOtpWhatsapp">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <div class="buttons clearfix">
+                    <div class="pull-left">
+                        <a href="indexe223.html?route=account/login" class="btn btn-default">Back</a>
+                    </div>
+                    
+                    <div class="pull-right">
+                        <input type="submit" value="Send" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

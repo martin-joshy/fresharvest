@@ -1,0 +1,35 @@
+{% extends "store/base.html" %} {% load static %} {% block for_common_body %}
+
+<div class="container">
+  <div class="row">
+    <div id="content" class="col-sm-9">
+      {% block for_common_body_user_account %} Custom body {% endblock %}
+    </div>
+
+    <aside id="column-right" class="col-sm-3 hidden-xs">
+      <div class="section sidebar">
+        <div class="section-heading">
+          <div class="border"></div>
+          Account
+        </div>
+        <div class="list-group">
+          <a href="" class="list-group-item">My Account</a>
+          <a href="{%url 'update-profile'%}" class="list-group-item"
+            >Edit Account</a
+          >
+          <a href="{%url 'display-wallet'%}" class="list-group-item">Wallet</a>
+          <a href="{%url 'display-address'%}" class="list-group-item"
+            >Address Book</a
+          >
+          <a href="{%url 'wish-list'%}" class="list-group-item">Wish List</a>
+          <a href="{%url 'display-order-history'%}" class="list-group-item"
+            >Order History</a
+          >
+          <a href="{%url 'logout'%}" class="list-group-item">Logout</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block custombody %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+
+<!-- tracking section start -->
+<div class="page-body">
+    <!-- tracking table start -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="title-header title-header-block package-card">
+                            
+                                
+                                <div class="row justify-content-between">
+                                    <div class="col-4">
+                                        <h5>Order #{{order.id}}</h5>
+                                    </div>
+                                    
+                                    {%if order.order_status == 'Canceled'%}
+                                    <div class="col-5">
+                                        <strong class="text-danger">CANCELED</strong>
+                                    </div>
+                                    {%else%}
+                                    <!-- Manually written the form field as for some unknown reason the widgits were not getting rendered -->
+                                    <div class="col-5">
+                                        <div class="mb-4 row align-items-center">
+                                            <label class="col-sm-3 col-form-label form-label-title">Change Status:</label>
+                                            <div class="col-sm-9">
+                                                <select name="{{ form.order_status.name }}" class="form-control" id="{{ form.order_status.id_for_label }}">
+                                                    <option value="" {% if form.order_status.value == "" %}selected{% endif %}>{{ form.order_status.empty_label }}</option>
+                                                    {% for choice in form.order_status.field.choices %}
+                                                        <option value="{{ choice.0 }}" {% if choice.0 == form.order_status.value %}selected{% endif %}>{{ choice.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                {% if form.order_status.errors %}
+                                                    <div class="text-danger">
+                                                        {{ form.order_status.errors }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        $('#id_order_status').change(function() {
+                                            var selectedValue = $(this).val();
+                                            $.ajax({
+                                                url: "{%url 'change-status' order.id%}",
+                                                type: 'POST',
+                                                headers: {
+                                                    'X-CSRFToken': '{{ csrf_token }}'
+                                                },
+                                                data: {
+                                                    'order_status': selectedValue
+                                                },
+                                                success: function(response) {
+                                                    console.log('Status change request sent successfully');
+                                                    console.log(reponse)
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    console.error('Error sending status change request:', error);
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    {%endif%}
+                                </div>
+                                <div class="card-order-section">
+                                <ul>
+                                    <li>{{ order.order_date|date:"F j, Y" }} at {{ order.order_date|time:"g:i a" }}
+                                    </li>
+                                    <li>{{total_items_count}} items</li>
+                                    <li>Total INR {{grand_total}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-inner cart-section order-details-table">
+                            <div class="row g-4">
+                                <div class="col-xl-8">
+                                    <div class="table-responsive table-details">
+                                        <table class="table cart-table table-borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2">Items</th>
+                                                    <th class="text-end" colspan="2">
+                                                        <a href="javascript:void(0)"
+                                                            class="theme-color">/a>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                {% for item in order_items %}
+                                                <tr class="table-order">
+                                                    <td>
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{%static 'media/images/small/'%}{{item.product.get_file_name}}"
+                                                                class="img-fluid blur-up lazyload" alt="{{item.product.title}}">
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <p>Product Name</p>
+                                                        <h5>{{item.product.title}}</h5>
+                                                    </td>
+                                                    <td>
+                                                        <p>Quantity</p>
+                                                        <h5>{{item.qty}}</h5>
+                                                    </td>
+                                                    <td>
+                                                        <p>Price</p>
+                                                        <h5>INR {{item.total_price|floatformat:2}}</h5>
+                                                    </td>
+                                                </tr>
+                                                {%endfor%}
+                                            </tbody>
+
+                                            <tfoot>
+                                                <tr class="table-order">
+                                                    <td colspan="3">
+                                                        <h5>Subtotal :</h5>
+                                                    </td>
+                                                    <td>
+                                                        <h4>INR {{grand_total|floatformat:2}}</h4>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="table-order">
+                                                    <td colspan="3">
+                                                        <h5>Shipping :</h5>
+                                                    </td>
+                                                    <td>
+                                                        <h4>INR 0</h4>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="table-order">
+                                                    <td colspan="3">
+                                                        <h5>Tax(GST) :</h5>
+                                                    </td>
+                                                    <td>
+                                                        <h4>INR 0</h4>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="table-order">
+                                                    <td colspan="3">
+                                                        <h4 class="theme-color fw-bold">Total Price :</h4>
+                                                    </td>
+                                                    <td>
+                                                        <h4 class="theme-color fw-bold">INR {{grand_total|floatformat:2}}</h4>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <div class="order-success">
+                                        <div class="row g-4">
+                                            <h4>summary</h4>
+                                            <ul class="order-details">
+                                                <li>Order ID: {{ order.uuid|stringformat:"s"|slice:"-12:" }}</li>
+                                                <li>Order Date: {{ order.order_date|date:"F j, Y" }}</li>
+                                                <li>Order Total: INR {{grand_total|floatformat:2}}</li>
+                                            </ul>
+
+                                            <h4>shipping address</h4>
+                                            <ul class="order-details">
+                                                <li>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</li>
+                                                <li>{{order.shipping_address.address_line_1}}</li>
+                                                <li>{{order.shipping_address.city}}</li>
+                                                <li>{{order.shipping_address.post_code}}</li>
+                                                <li>{{order.shipping_address.region}}</li>
+                                            </ul>
+
+                                            <div class="payment-mode">
+                                                <h4>payment method</h4>
+                                                <p>{{order.payment_method}}</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- section end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- tracking table end -->
+
+</div>
+<!-- tracking section End -->
+
+{% endblock %}

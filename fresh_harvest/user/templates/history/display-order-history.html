@@ -1,0 +1,42 @@
+{% extends "account/base-user-account.html" %}
+{% load static %}
+
+
+
+
+
+
+
+{% block for_common_body_user_account %}
+
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td class="text-center">Order Id</td>
+                <td class="text-center">Ordered On</td>
+                <td class="text-center">Total Price</td>
+                <td class="text-center">Method of payment</td>
+                <td class="text-center">Order Status</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in all_orders %}
+            <tr>
+                <td><a href="{%url 'detailed-order-history' order.id%}">{{ order.uuid|stringformat:"s"|slice:"-12:" }}</a></td>
+                <td>{{ order.order_date|date:"F j, Y" }}</td>
+                <td>{{order.total_price}}</td>
+                <td>{{order.payment_method}}</td>
+                <td>{{order.order_status}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+                 
+   
+         
+{% endblock %}
+
+

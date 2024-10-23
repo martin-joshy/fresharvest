@@ -1,0 +1,19 @@
+<!-- Inherits the nav bar and the footer from the 'base.html' (parent) and body
+from 'store.html'(Intermidiate) which displays products -->
+{% extends "./store.html" %}
+
+
+
+<!-- overrides the specific to home page -->
+{% block specific_to_home_page1 %}
+{% endblock %}
+
+{% block for_section_heading %}
+{{category.name}}
+{% endblock %}
+
+{% block specific_to_home_page2 %}
+{% endblock %}
+
+
+

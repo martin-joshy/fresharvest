@@ -1,0 +1,132 @@
+
+<!-- Inherits the nav bar and the footer -->
+{% extends "./base.html" %} 
+
+
+
+{% block for_common_body %}
+
+
+<div id="account-register" class="container">
+    <div class="row">
+        <div id="content" class="col-sm-9">
+            <h1>Register Account</h1>
+            <p>If you already have an account with us, please login at the <a href="{%url 'login'%}">login page</a>.</p>
+            <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                {% csrf_token %}
+                <fieldset id="account">
+                    <legend>Your Personal Details</legend>
+                    <div class="form-group required" style="display: none;">
+                        <label class="col-sm-2 control-label">Customer Group</label>
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="customer_group_id" value="1" checked="checked" />
+                                    Default
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.username.id_for_label }}" class="col-sm-2 control-label">{{ form.username.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">{{ form.first_name.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.first_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 control-label">{{ form.last_name.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.last_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.email.id_for_label }}" class="col-sm-2 control-label">{{ form.email.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.phone_number.id_for_label }}" class="col-sm-2 control-label">{{ form.phone_number.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                                <div class="text-danger">
+                                    {{ form.phone_number.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                </fieldset>
+                <fieldset>
+                    <legend>Your Password</legend>
+                    <div class="form-group required">
+                        <label for="{{ form.password1.id_for_label }}" class="col-sm-2 control-label">{{ form.password1.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger">
+                                    {{ form.password1.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="{{ form.password2.id_for_label }}" class="col-sm-2 control-label">{{ form.password2.label }}</label>
+                        <div class="col-sm-10">
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger">
+                                    {{ form.password2.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    </div>
+                </fieldset>
+                <div class="buttons">
+                    <div class="pull-right">
+                        I have read and agree to the <a href="index11ee.html?route=information/information/agree&amp;information_id=3" class="agree"><b>Privacy Policy</b></a>
+                        <input type="checkbox" name="agree" value="1" />
+                        &nbsp;
+                        <input type="submit" value="Continue" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+
+
+
+{% endblock %}
+
+
+

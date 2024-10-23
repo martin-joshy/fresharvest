@@ -1,0 +1,93 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends 'base.html' %}
+
+<!-- Defing the body  -->
+{%block custombody%}
+
+<div class="page-body">
+  <!-- All User Table Start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-table">
+          <div class="card-body">
+            <div class="title-header option-title">
+              <h5>Products to be Approved</h5>
+            </div>
+            <div class="table-responsive table-product">
+              <div id="table_id_wrapper" class="dataTables_wrapper no-footer">
+                <div id="table_id_filter" class="dataTables_filter">
+                  <form
+                    class="d-flex"
+                    method="GET"
+                    action="{%url 'approve-product-display'%}"
+                  >
+                    <input
+                      class="form-control me-2"
+                      type="search"
+                      placeholder="Search for Products"
+                      aria-label="Search"
+                      name="name"
+                    />
+                    <button class="btn btn-outline-success" type="submit">
+                      Search
+                    </button>
+                  </form>
+                </div>
+
+                <table class="table all-package theme-table" id="table_id">
+                  <thead>
+                    <tr>
+                      <th>Seller Name</th>
+                      <th>Product</th>
+                      <th>Stock</th>
+                      <th>Status</th>
+                      <th>Reference number</th>
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {% for product in products%}
+                    <tr>
+                      <td>
+                        {{product.user.first_name}}&nbsp;{{product.user.last_name}}
+                      </td>
+                      <td>{{product.product}}</td>
+
+                      <td>{{product.stock}}</td>
+
+                      {%if product.aprroved %}
+                      <td class="status-close">
+                        <span>Approved</span>
+                      </td>
+                      {%else%}
+                      <td class="status-danger">
+                        <span>Pending </span>
+                      </td>
+                      {%endif%}
+                      <td>{{product.uuid}}</td>
+                      <td>
+                        <ul>
+                          <li>
+                            <a href="{%url 'approve-product' product.pk%}">
+                              <i class="ri-pencil-line"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- All User Table Ends-->
+</div>
+
+{%endblock%}

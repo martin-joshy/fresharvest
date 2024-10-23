@@ -1,0 +1,149 @@
+{% extends 'base.html' %} {% block custombody %}
+<!-- Order section Start -->
+<div class="page-body">
+  <!-- Table Start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-table">
+          <div class="card-body">
+            <div class="title-header option-title">
+              <h5>Order List</h5>
+              <a href="#" class="btn btn-solid">Download all orders</a>
+            </div>
+            <div>
+              <div class="table-responsive">
+                <table
+                  class="table all-package order-table theme-table"
+                  id="table_id"
+                >
+                  <thead>
+                    <tr>
+                      <th>Order Code</th>
+                      <th>Date</th>
+                      <th>Payment Method</th>
+                      <th>Delivery Status</th>
+                      <th>Amount</th>
+                      <th>Option</th>
+                    </tr>
+                  </thead>
+                  {%for order in all_order%}
+                  <tbody>
+                    <tr>
+                      <td>{{ order.uuid|stringformat:"s"|slice:"-12:" }}</td>
+
+                      <td>{{ order.order_date|date:"F j, Y" }}</td>
+
+                      <td>{{order.payment_method}}</td>
+
+                      <!-- <td class="order-success">
+                                                <span>Success</span>
+                                            </td> -->
+                      <td>{{order.order_status}}</td>
+
+                      <td>INR {{order.total_price}}</td>
+
+                      <td>
+                        <ul>
+                          <li>
+                            <a href="{%url 'display-order-detail' order.id%}">
+                              <i class="ri-eye-line"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                  {%endfor%}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Table End -->
+</div>
+<!-- Order section End -->
+<!-- Offcanvas Box Start -->
+<div
+  class="offcanvas offcanvas-end order-offcanvas"
+  tabindex="-1"
+  id="order-details"
+  aria-labelledby="offcanvasExampleLabel"
+  aria-expanded="false"
+>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="offcanvasExampleLabel">#573-685572</h4>
+    <button
+      type="button"
+      class="btn-close text-reset"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="order-date">
+      <h6>September 17, 2022 <span class="ms-3">8:12 PM</span></h6>
+      <a href="javascript:void(0)" class="d-block mt-1">Cancel Order</a>
+    </div>
+
+    <div
+      class="accordion accordion-flush custome-accordion"
+      id="accordionFlushExample"
+    >
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#flush-collapseOne"
+            aria-expanded="false"
+            aria-controls="flush-collapseOne"
+          >
+            Status
+          </button>
+        </h2>
+        <div
+          id="flush-collapseOne"
+          class="accordion-collapse collapse"
+          aria-labelledby="flush-headingOne"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div class="accordion-body">
+            <ul class="status-list">
+              {% for status_choice in status_choices %}
+              <li>
+                <!-- Pass status_choice and pk to the setHrefAttribute function -->
+                <a href="#" class="myAnchor" data-slug="{{ status_choice }}"
+                  >{{ status_choice }}</a
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Offcanvas Box End -->
+
+<script>
+  function setHrefAttribute(id) {
+    var links = document.getElementsByClassName("myAnchor");
+    console.log(links);
+    // Iterate over the collection of elements
+    for (var i = 0; i < links.length; i++) {
+      // Generate the URL and set it as the href attribute for each element
+      slug = links[i].getAttribute("data-slug");
+      links[i].href = "seller/order/change-Status/" + id + "/" + slug;
+    }
+  }
+</script>
+
+{% endblock %}

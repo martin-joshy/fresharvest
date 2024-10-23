@@ -1,0 +1,40 @@
+{% extends "account/base-user-account.html" %}
+
+{% load static %}
+
+{% block for_common_body_user_account %}
+
+  <div id="content" class="col-sm-9">
+    <h2>Address Book Entries</h2>
+    {%for address in all_address%}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <td class="text-left">
+              {{address.first_name}} &nbsp; {{address.last_name}}<br>
+              {{address.address_line_1}}<br>
+              {{address.city}} &nbsp; {{address.post_code}}<br>
+              {{address.region}}<br>
+              Kerala, India
+              
+            </td>
+            <td class="text-right">
+              <a href="{%url 'edit-address' address.pk%}" class="btn btn-info">Edit</a> &nbsp; 
+              <a href="{%url 'delete-address' address.pk%}" data-toggle="tooltip" title="" class="btn btn-danger" onclick="return confirm('Are you sure?')" data-original-title="Delete">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {%endfor%}
+          
+    <div class="buttons clearfix">
+      
+      <div class="pull-right">
+        <a href="{%url 'add-address'%}" class="btn btn-primary">New Address</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

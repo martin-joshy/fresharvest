@@ -1,0 +1,154 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+
+
+
+
+{% block for_common_body %}
+
+
+
+<style>
+    .error-border {
+        border-color: red !important;
+    }
+</style>
+
+<style>
+    #test {
+  display: flex;          /* Establish flex container */
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically  */
+  height: 100vh;          /* Optional: Make container take full viewport height */
+}
+</style>
+<div id="account-login" class="container ">
+    <div class="row" id="test">
+        <div id="content" class="col-sm-9">
+            <div class="row " style="padding-left: 20rem; padding-right: 20rem;">
+                <div class="col" style="padding-top: 5rem;" >
+                    <div class="well" style="height: 50rem;">
+                        <h2 class="text-center" style="padding-top: 3rem; padding-bottom: 3rem;">Complete Your payment of <span class="text-success">INR {{amount}}</span></h2>
+                        
+                           
+                        <div id="paypal-button-container"></div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script src="https://www.paypal.com/sdk/js?client-id=Acx1FmvjyeSV9_Szvgt0UpA4g02J3JoEV7-mABFR5jX3V4GP7Ef6c4_SurUEJult4U9IIkkpNQEH6CX3&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+<script>
+
+    var total = '{{amount}}';
+    var csrftoken = '{{csrf_token}}'
+    
+
+
+    const paypalButtonsComponent = paypal.Buttons({
+        // optional styling for buttons
+        // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+        style: {
+            color: "gold",
+            shape: "rect",
+            layout: "vertical"
+        },
+
+        // set up the transaction
+        createOrder: (data, actions) => {
+            // pass in any options from the v2 orders create call:
+            // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+
+            const dividedTotal = parseFloat(total) / 80;
+
+            const createOrderPayload = {
+                purchase_units: [
+                    {
+                        amount: {
+                            value: dividedTotal.toFixed(2)
+                        }
+                    }
+                ]
+            };
+
+            return actions.order.create(createOrderPayload);
+        },
+
+        // finalize the transaction
+        onApprove: (data, actions) => {
+            const captureOrderHandler = (details) => {
+                const payerName = details.payer.name.given_name;
+                console.log('Transaction completed by ' + details.payer.name.given_name );  
+                const paymentStatus = details.status;
+
+                let status;
+                if (paymentStatus === 'COMPLETED') {
+                    status = 'Completed';
+                } else if (paymentStatus === 'PENDING') { 
+                    status = 'Pending';
+                } else {
+                    status = 'Failed'; 
+                }
+
+                
+                const requestData = {
+                    status: status,
+                    orderId: orderId
+                };
+
+
+                fetch("{%url 'pay-failed-order'%}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+
+            };
+
+            return actions.order.capture().then(captureOrderHandler);
+        },
+
+        // handle unrecoverable errors
+        onError: (err) => {
+            console.error('An error prevented the buyer from checking out with PayPal');
+
+    
+
+        }
+    });
+
+    paypalButtonsComponent
+        .render("#paypal-button-container")
+        .catch((err) => {
+            console.error('PayPal Buttons failed to render');
+        });
+
+</script>
+
+  
+         
+{% endblock %}
+
+

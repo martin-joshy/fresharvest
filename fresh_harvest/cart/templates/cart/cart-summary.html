@@ -1,0 +1,18 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+
+{% block for_common_body %}
+<div id="checkout-cart" class="container">
+    
+
+    <div class="row">
+        <div id="content" class="col-sm-12 checkout">
+            {%include 'cart/cart-summary-partial.html'%}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+

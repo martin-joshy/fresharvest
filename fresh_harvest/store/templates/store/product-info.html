@@ -1,0 +1,180 @@
+
+<!-- Inherits the nav bar and the footer -->
+{% extends "./base.html" %}
+{% load static %}
+
+
+
+
+{% block for_common_body %}
+
+<!-- javaScript for the image zoom -->
+<script>
+    $(document).ready(function() {
+        if ($(window).width() > 767) {
+            $("#zoom").elevateZoom({
+                gallery: 'product-additional-block',
+                //inner zoom
+                zoomType: "window",
+                cursor: "crosshair"
+            });
+    
+            var z_index = 0;
+    
+            $(document).on('click', '.thumbnail', function() {
+                $('.thumbnails').magnificPopup('open', z_index);
+                return false;
+            });
+    
+            $('.product-additional-block a').on('mouseover', function() {
+                var smallImage = $(this).attr('data-image');
+                var largeImage = $(this).attr('data-zoom-image');
+                var ez = $('#zoom').data('elevateZoom');
+                $('.thumbnail').attr('href', largeImage);
+                ez.swaptheimage(smallImage, largeImage);
+                z_index = $(this).index('.product-additional-block a');
+                return false;
+            });
+        } else {
+            $(document).on('click', '.thumbnail', function() {
+                $('.thumbnails').magnificPopup('open', 0);
+                return false;
+            });
+        }
+    });
+    
+</script>
+
+<!-- displaying the itmes in the instance product -->
+<div class="container">
+    <div class="row">
+        <div id="content" class="productpage col-sm-12">
+            <div class="row">
+                <div class="col-sm-6 col-md-5 left">
+                    <div class="thumbnails">
+                        <div class="image">
+                                <img height="400" width="400" id="zoom" src="{%static 'media/images/'|add:product.get_file_name %}" data-zoom-image="{%static 'media/images/'|add:product.get_file_name %}" title="Orange" alt="Orange" />
+                         
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-sm-6 col-md-7 right">
+                    <h1 class="product-title">{{product.title | capfirst}}</h1>
+                    <ul class="list-unstyled price">
+                        {%if product.get_discounted_price %}
+                        <li>
+                            <h2 class="product-price"><span class="price-old-live">INR {{product.get_discounted_price}}</span>
+                                <span style="font-size: medium;";"><strike style="color: gray;">INR {{product.price}}</strike>  <span style="color: green;">({{product.get_highest_discount_percentage}} %) </span></span>
+                            </h2>
+                        </li>
+                        {%else%}
+                        <li>
+                            <h2 class="product-price"><span class="price-old-live">INR {{product.price}}</span></h2>
+                        </li>
+                        {%endif%}
+                    </ul>
+                    <div class="rating">
+                        <p>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x blank"></i></span>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x blank"></i></span>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x blank"></i></span>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x blank"></i></span>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x blank"></i></span>
+                            <a class="ratings-link" href="#" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">0 reviews</a>
+                        </p>
+                    </div>
+                    <ul class="list-unstyled detail">
+                        {%if product.current_stock == 0%}
+                        <li class="stock">
+                            Out of Stock
+                        </li>
+                        {%else%}
+                        <li class="stock">
+                            {% if product.current_stock < 10 %}
+                                Low Stock: Only  {{ product.current_stock }} available!!
+                            {% else %}
+                                In Stock
+                            {% endif %}
+                        </li>
+                        {%endif%}
+                    </ul>
+                    <ul class="list-unstyled price2">
+                        <li class="tax">Ex Tax:<span> <span class="price-tax-live">₹10</span></span></li>
+                    </ul>
+                    <div id="product">
+                        <div class="form-group required ">
+                            <label >Packet Size</label>
+                            <div id="input-option237">
+                                <div class="radio">
+                                    <label>
+                                    {{product.quantity_type | capfirst}}
+                                    </label>
+                                
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <form method = "post" action="{%url 'cart-add' product.id%}">
+                                {% csrf_token %}
+                                <label class="control-label" for="input-quantity">Qty</label>
+                                <input type="number" name="quantity" value="" size="2" id="input-quantity" class="form-control" />
+                                <button type="submit" id="button-cart" data-loading-text="Loading..." class="btn btn-primary btn-lg btn-block addtocart">Add</button>
+                            </form>  
+                            <div class="btn-group">
+                            <form method = "post" action="{%url 'wishlist-add' product.id%}">
+                                {% csrf_token %}
+                                <button type="submit" data-toggle="tooltip" class="btn btn-default wishlist" title="Wish List" >
+                                    <i class="fa fa-heart"></i>Wish List
+                                </button>
+                                <button type="button" data-toggle="tooltip" class="btn btn-default compare" title="Compare" onclick="compare.add('40');">
+                                    <i class="fa fa-exchange"></i>Compare
+                                </button>
+                            </form> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 producttab">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
+                            <li><a href="#tab-review" data-toggle="tab">Reviews (0)</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-description">
+                                <p>{{product.description}}</p>
+                                <p class="intro"><br></p>
+                                <p><br></p>
+                                <p class="intro"><br></p>
+                            </div>
+                            <div class="tab-pane" id="tab-review">
+                                <form class="form-horizontal" id="form-review">
+                                    <div id="review"></div>
+                                    <h4>Comming Soon</h4>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prodbottominfo">
+                        <ul class="list-unstyled">
+                            <li data-toggle="tooltip" title="Worldwide Shipping">
+                                <img src="https://opencart.lionode.com/bigmarket/oc012019/oc01/image/catalog/world.png" alt="">
+                            </li>
+                            <li data-toggle="tooltip" title="100% Original Product">
+                                <img src="https://opencart.lionode.com/bigmarket/oc012019/oc01/image/catalog/original.png" alt="">
+                            </li>
+                            <li data-toggle="tooltip" title="Best Price Guaranteed">
+                                <img src="https://opencart.lionode.com/bigmarket/oc012019/oc01/image/catalog/inquire.png" alt="">
+                            </li>
+                            <li title="COD Available in India" data-toggle="tooltip">
+                                <img src="https://opencart.lionode.com/bigmarket/oc012019/oc01/image/catalog/cod.png" alt="">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

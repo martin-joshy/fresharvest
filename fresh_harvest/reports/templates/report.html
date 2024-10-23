@@ -1,0 +1,170 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends '.\custombase.html' %}
+
+
+
+
+<!-- Defing the body  -->
+{%block custombody%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="page-body">
+    <!-- New User start -->
+    <div class="container-fluid row">
+        <div class="col-12 ">
+            <div class="card row">
+                <form method="post" action="" class="mb-4 row align-items-center">
+                    {% csrf_token %}
+                    <div class="col-md-10">
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Select Time Frame:</label>
+                            <div class="col-md-9 col-lg-10">
+                                <select name="timeframe" class="form-control">
+                                    <option disabled selected>Select Time Frame</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-4 row align-items-center ">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">Start Date</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="date" name="start_date">
+                            </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                            <label class="col-lg-2 col-md-3 col-form-label form-label-title">End Date</label>
+                            <div class="col-md-9 col-lg-10">
+                                <input class="form-control" type="date" name="end_date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="offset-md-7 pt-3">
+                        <div class="mb-4 row align-items-center">
+                            <div class="col-md-9 col-lg-10 offset-md-3 offset-lg-2">
+                                <button type="submit" class="btn btn-primary">Generate Report</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>  
+        </div>
+        
+        <div class="card align-items-center">
+        <canvas id="myChart"></canvas>
+    </div>
+                <!-- report.html -->
+
+            <div class="col-12">
+                <div class="card " >
+                    <div class="card-header border-0 py-5">
+                        <div class="card-header-title">
+                            <h4>{{ heading|capfirst }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="user-table list-table table" id="userTable" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Total Sales</th>
+                                        <th>Total Discounts</th>
+                                        <th>Total Coupon Discounts</th>
+                                        <th>Net Sales</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in report_data %}
+                                    <tr>
+                                        <td><strong>{{ entry.date }}</strong></td>
+                                        <td>{{ entry.total_sales }}</td>
+                                        <td>{{ entry.total_discounts }}</td>
+                                        <td>{{ entry.total_coupon_discounts }}</td>
+                                        <td>{{ entry.net_sales}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        
+    </div>
+    <!-- New User End -->
+</div>
+
+<!-- Ignore the error message, as once it get renders there is no error -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for entry in report_data %}"{{ entry.date }}",{% endfor %}],
+        datasets: [{
+            label: 'Total Discounts',
+            data: [{% for entry in report_data %}{{ entry.total_discounts }},{% endfor %}],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1,
+            yAxisID: 'y-axis-1' 
+        }, {
+            label: 'Total Coupon Discounts',
+            data: [{% for entry in report_data %}{{ entry.total_coupon_discounts }},{% endfor %}],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            yAxisID: 'y-axis-1' 
+        }, {
+            label: 'Net Sales',
+            data: [{% for entry in report_data %}{{ entry.net_sales }},{% endfor %}],
+            type: 'line', 
+            fill: false, 
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 2,
+            pointRadius: 4,
+            yAxisID: 'y-axis-2'
+        }, {
+            label: 'Total Sales',
+            data: [{% for entry in report_data %}{{ entry.total_sales }},{% endfor %}],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            yAxisID: 'y-axis-1' 
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                id: 'y-axis-1', 
+                position: 'left', 
+                ticks: {
+                    beginAtZero: true
+                }
+            }, {
+                id: 'y-axis-2', 
+                position: 'right', 
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+
+
+    });
+</script>
+
+
+
+
+{%endblock%}

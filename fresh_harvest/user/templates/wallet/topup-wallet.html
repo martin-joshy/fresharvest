@@ -1,0 +1,166 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+
+
+
+
+{% block for_common_body %}
+
+
+
+<style>
+    .error-border {
+        border-color: red !important;
+    }
+</style>
+
+<style>
+    #test {
+  display: flex;          /* Establish flex container */
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically  */
+  height: 100vh;          /* Optional: Make container take full viewport height */
+}
+</style>
+<div id="account-login" class="container ">
+    <div class="row" id="test">
+        <div id="content" class="col-sm-9">
+            <div class="row " style="padding-left: 20rem; padding-right: 20rem;">
+                <div class="col" >
+                    <div class="well" style="height: 50rem;">
+                        <h2 class="text-center">Total Balance <span class="text-success">INR {{total_balance}}</span></h2>
+                        <form action="" method="post" class="needs-validation">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label" for="input-username">Enter the amount that you would like topup. </label>
+                                <input type="text" name="username" value="INR" placeholder="Enter Amount" id="input-username" class="form-control" />
+                                <div class="invalid-feedback" id="amount-error" style="display: none; color: red;">Please enter a valid amount between ₹1 and ₹10000.00.</div>
+                            </div>
+                            <div id="paypal-button-container"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var inputUsername = document.getElementById("input-username");
+        var amountError = document.getElementById("amount-error");
+
+        inputUsername.addEventListener("input", function() {
+            // Remove non-numeric characters
+            this.value = this.value.replace(/\D/g, "");
+
+            // Limit to 5 digits
+            if (this.value.length > 5) {
+                this.value = this.value.slice(0, 5);
+            }
+
+            // Check for negative values
+            if (parseFloat(this.value) < 0) {
+                this.value = "";
+            }
+            updatePayPalButton();
+         });
+         function updatePayPalButton() {
+            const amount = parseFloat(inputUsername.value);
+            if (isNaN(amount) || amount === 0 || amount > 10000 || amount < 1)  {
+                amountError.style.display = "block";
+                inputUsername.classList.add("error-border");
+                paypalButton.disable(); 
+            } else {
+                amountError.style.display = "none";
+                inputUsername.classList.remove("error-border");
+                paypalButton.enable(); 
+                total = amount;
+            }
+        }
+    });
+</script>
+  
+
+
+
+
+
+
+<script src="https://www.paypal.com/sdk/js?client-id=Acx1FmvjyeSV9_Szvgt0UpA4g02J3JoEV7-mABFR5jX3V4GP7Ef6c4_SurUEJult4U9IIkkpNQEH6CX3&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+<script>
+
+    var total = 0;
+    let paypalButton;
+
+    const paypalButtonsComponent = paypal.Buttons({
+        // optional styling for buttons
+        // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+        style: {
+            color: "gold",
+            shape: "rect",
+            layout: "vertical"
+        },
+
+        onInit: function(data, actions) {
+            paypalButton = actions; // Store for later access
+            paypalButton.disable(); // Perform initial validation check
+        },
+
+        // set up the transaction
+        createOrder: (data, actions) => {
+            // pass in any options from the v2 orders create call:
+            // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+
+            const dividedTotal = parseFloat(total) / 80;
+
+            const createOrderPayload = {
+                purchase_units: [
+                    {
+                        amount: {
+                            value: dividedTotal.toFixed(2)
+                        }
+                    }
+                ]
+            };
+
+            return actions.order.create(createOrderPayload);
+        },
+
+        // finalize the transaction
+        onApprove: (data, actions) => {
+            const captureOrderHandler = (details) => {
+                const payerName = details.payer.name.given_name;
+                const baseUrl = window.location.origin + '/user';
+                console.log('Transaction completed');
+                window.location.href = baseUrl + '/topup-wallet-success/'+ total.toString();
+
+
+            };
+
+            return actions.order.capture().then(captureOrderHandler);
+        },
+
+        // handle unrecoverable errors
+        onError: (err) => {
+            console.error('An error prevented the buyer from checking out with PayPal');
+
+    
+
+        }
+    });
+
+    paypalButtonsComponent
+        .render("#paypal-button-container")
+        .catch((err) => {
+            console.error('PayPal Buttons failed to render');
+        });
+
+</script>
+
+  
+         
+{% endblock %}
+
+

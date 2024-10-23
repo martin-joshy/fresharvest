@@ -1,0 +1,161 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends 'base.html' %}
+
+<!-- Defing the body  -->
+{%block custombody%}
+
+<div class="page-body">
+  <!-- New Product Add Start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-8 m-auto">
+            <div class="card" data-select2-id="select2-data-33-3v2a">
+              <div class="card-body" data-select2-id="select2-data-32-0fuo">
+                <div class="card-header-2">
+                  <h5>Product Information</h5>
+                </div>
+
+                {% load static %}
+                <link
+                  rel="stylesheet"
+                  type="text/css"
+                  href="{% static 'css/image_cropping.css' %}"
+                />
+                <script
+                  type="text/javascript"
+                  src="{% static 'js/jquery.Jcrop.min.js' %}"
+                ></script>
+                <script
+                  type="text/javascript"
+                  src="{% static 'js/image_cropping.js' %}"
+                ></script>
+                {{ form.media }}
+
+                <form
+                  method="POST"
+                  action=""
+                  class="theme-form theme-form-2 mega-form"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+                  <div class="mb-4 row align-items-center">
+                    <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                      >{{ form.title.label_tag }}</label
+                    >
+                    <div class="col-md-9 col-lg-10">
+                      {{ form.title }} {% if form.title.errors %}
+                      <div class="text-danger">{{ form.title.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-4 row align-items-center">
+                    <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                      >{{ form.price.label_tag }}</label
+                    >
+                    <div class="col-md-9 col-lg-10">
+                      {{ form.price }} {% if form.price.errors %}
+                      <div class="text-danger">{{ form.price.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div
+                    class="mb-4 row align-items-center"
+                    data-select2-id="select2-data-41-0oly"
+                  >
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >{{ form.category.label_tag }}</label
+                    >
+                    <div
+                      class="col-sm-9"
+                      data-select2-id="select2-data-40-sxcx"
+                    >
+                      {{ form.category }} {% if form.category.errors %}
+                      <div class="text-danger">{{ form.category.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div
+                    class="mb-4 row align-items-center"
+                    data-select2-id="select2-data-51-s1d9"
+                  >
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >{{ form.quantity_type.label_tag }}</label
+                    >
+                    <div
+                      class="col-sm-9"
+                      data-select2-id="select2-data-50-zn3i"
+                    >
+                      <!-- prettier-ignore -->
+                      {{ form.quantity_type }} {% if form.quantity_type.errors %}
+                      <div class="text-danger">
+                        {{ form.quantity_type.errors }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-4 row align-items-center">
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >Visibility:</label
+                    >
+                    <div class="col-sm-9">
+                      {{ form.is_active }} {% if form.is_active.errors %}
+                      <div class="text-danger">{{ form.is_active.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="mb-4 row align-items-center">
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >{{ form.current_stock.label_tag }}</label
+                    >
+                    <div class="col-sm-9">
+                      <!-- prettier-ignore -->
+                      {{ form.current_stock }} {% if form.current_stock.errors %}
+                      <div class="text-danger">
+                        {{ form.current_stock.errors }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="mb-4 col align-items-center pt-4">
+                    <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                      >{{ form.description.label_tag }}</label
+                    >
+                    <div class="col-12 pt-2">
+                      {{ form.description }} {% if form.description.errors %}
+                      <div class="text-danger">
+                        {{ form.description.errors }}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="mb-4 row align-items-center">
+                    <label class="col-sm-3 col-form-label form-label-title"
+                      >{{ form.image.label_tag }}</label
+                    >
+                    <div class="col-sm-9">
+                      {{ form.image }} {% if form.image.errors %}
+                      <div class="text-danger">{{ form.image.errors }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">
+                    {%block custombutton%}Create Product{%endblock%}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- New Product Add End -->
+</div>
+
+{%endblock%}

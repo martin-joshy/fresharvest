@@ -1,0 +1,213 @@
+<!-- inherits the nav bar and the side bar -->
+{% extends 'base.html' %}
+
+<!-- Defing the body  -->
+{%block custombody%}
+<div class="page-body">
+  <!-- New User start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-8 m-auto">
+            <div class="card">
+              <div class="card-body">
+                <div class="title-header option-title">
+                  <h5>Add New Offer</h5>
+                </div>
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button
+                      class="nav-link active"
+                      id="pills-home-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#pills-home"
+                      type="button"
+                    >
+                      Product Offer
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button
+                      class="nav-link"
+                      id="pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#pills-profile"
+                      type="button"
+                    >
+                      Category Offer
+                    </button>
+                  </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                  <div
+                    class="tab-pane fade active show"
+                    id="pills-home"
+                    role="tabpanel"
+                  >
+                    <form
+                      method="POST"
+                      action="{%url 'create-product-offer'%}"
+                      class="theme-form theme-form-2 mega-form"
+                    >
+                      {% csrf_token %}
+
+                      <div class="row">
+                        <div class="mb-4 row align-items-center">
+                          <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                            >{{ form_product.product.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_product.product }} {%if form_product.product.errors%}
+                            <div class="text-danger">
+                              {{ form_product.product.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="form-label-title col-lg-2 col-md-3 mb-0"
+                          >
+                            <!-- prettier-ignore -->
+                            {{ form_product.discount_percentage.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_product.discount_percentage }} {% if form_product.discount_percentage.errors %}
+                            <div class="text-danger">
+                              {{ form_product.discount_percentage.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title"
+                            >{{ form_product.start_date.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_product.start_date }} {% if form_product.start_date.errors %}
+                            <div class="text-danger">
+                              {{ form_product.start_date.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title"
+                            >{{ form_product.end_date.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_product.end_date }} {% if form_product.end_date.errors %}
+                            <div class="text-danger">
+                              {{ form_product.end_date.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                          <div class="col-md-9 col-lg-10">
+                            <button type="submit" class="btn btn-primary">
+                              Give Product Offer
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="tab-pane fade" id="pills-profile" role="tabpanel">
+                    <form
+                      method="POST"
+                      action="{%url 'create-category-offer'%}"
+                      class="theme-form theme-form-2 mega-form"
+                    >
+                      {% csrf_token %}
+
+                      <div class="row">
+                        <div class="mb-4 row align-items-center">
+                          <label class="form-label-title col-lg-2 col-md-3 mb-0"
+                            >{{ form_category.category.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_category.category }} {% if form.category.errors %}
+                            <div class="text-danger">
+                              {{ form_category.category.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="form-label-title col-lg-2 col-md-3 mb-0"
+                          >
+                            <!-- prettier-ignore -->
+                            {{ form_category.discount_percentage.label_tag}}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_category.discount_percentage }} {% if form_category.discount_percentage.errors %}
+                            <div class="text-danger">
+                              {{ form_category.discount_percentage.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title"
+                            >{{ form_category.start_date.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_category.start_date }} {% if form_category.start_date.errors %}
+                            <div class="text-danger">
+                              {{ form_category.start_date.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="mb-4 row align-items-center">
+                          <label
+                            class="col-lg-2 col-md-3 col-form-label form-label-title"
+                            >{{ form_category.end_date.label_tag }}</label
+                          >
+                          <div class="col-md-9 col-lg-10">
+                            <!-- prettier-ignore -->
+                            {{ form_category.end_date }} {% if form_category.end_date.errors %}
+                            <div class="text-danger">
+                              {{ form_category.end_date.errors }}
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+
+                        <div class="mb-4 row align-items-center">
+                          <div class="col-md-9 col-lg-10">
+                            <button type="submit" class="btn btn-primary">
+                              Give Product Offer
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- New User End -->
+</div>
+{%endblock%}

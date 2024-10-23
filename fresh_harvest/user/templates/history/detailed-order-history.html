@@ -1,0 +1,268 @@
+{% extends "account/base-user-account.html" %} {% load static %}
+<!-- prettier-ignore -->
+{% load mathfilters %} 
+{% block for_common_body_user_account %}
+
+<div class="panel-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-center">Image</td>
+                <td class="text-left">Product Name</td>
+                <td class="text-left">Quantity</td>
+                <td class="text-right">Unit Price</td>
+                <td class="text-right">Total</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order_items %}
+              <tr>
+                <td class="text-center">
+                  <a href="{{item.product.get_absolute_url}}">
+                    <img
+                      height="50"
+                      width="50"
+                      src="{% static 'media/images/small/'|add:item.product.get_file_name %}"
+                      alt="{{ item.product.title }}"
+                      class="img-thumbnail"
+                    />
+                  </a>
+                </td>
+                <td class="text-left">
+                  <a href="{{ item.product.get_absolute_url }}"
+                    >{{ item.product.title }}</a
+                  >
+                </td>
+                <td class="text-left">
+                  {{ item.qty }}&nbsp; X &nbsp;{{ item.product.quantity_type }}
+                </td>
+                {% if item.discount %}
+                <td class="text-right">
+                  INR {{ item.price | add:item.discount |floatformat:2 }}
+                  <br />
+                  <span style="font-size: smaller">
+                    <strike style="color: gray">INR {{ item.price }}</strike>
+                    <span style="color: green"
+                      >({{ item.discount|div:item.price|mul:100 }} %)</span
+                    >
+                  </span>
+                  <span class="price-tax"></span>
+                </td>
+                {% else %}
+                <td class="text-right">INR {{ item.price }}</td>
+                {% endif %} {% if item.discount != 0 %}
+                <td class="text-right">
+                  INR {{ item.price | add:item.discount | mul:item.qty
+                  |floatformat:2 }}
+                  <br />
+                  <span style="font-size: smaller">
+                    <strike style="color: gray"
+                      >INR {{ item.price | mul:item.qty }}</strike
+                    >
+                    <span style="color: green"
+                      >({{ item.discount|div:item.price|mul:100 }} %)</span
+                    >
+                  </span>
+                  <span class="price-tax"></span>
+                </td>
+                {% else %}
+                <td class="text-right">
+                  INR {{ item.total_price|floatformat:2 }}
+                </td>
+                {% endif %}
+                <!-- <td class="text-right">INR {{ item.total_price|floatformat:2 }}</td> -->
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if order_instance.payment_status != Completed %}
+        <div class="buttons clearfix">
+          <div class="buttons clearfix">
+            <div class="pull-left">
+              <a
+                href="{%url 'compelete-failed-order' order_instance.id %}"
+                class="btn btn-primary"
+                >Complete the payment</a
+              >
+            </div>
+          </div>
+        </div>
+        {%else%} {% if order_instance.canceled %}
+        <div class="buttons clearfix">
+          <div class="buttons clearfix">
+            <div class="pull-left">
+              <button class="btn btn-primary">Raise a query</button>
+            </div>
+          </div>
+        </div>
+
+        {%else%}
+        <div class="buttons clearfix">
+          <div class="buttons clearfix">
+            <div class="pull-left">
+              <a
+                href="{% url 'cancel-order' pk %}"
+                class="btn btn-danger delete"
+                onclick="return confirmCancel()"
+                >Cancel Order</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function confirmCancel() {
+            // Display a confirmation dialog
+            return confirm("Are you sure you want to cancel your order?");
+          }
+        </script>
+        {%endif%} {%endif%}
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <table class="table table-bordered grand-total">
+          <tbody>
+            <tr>
+              <td>
+                <strong>Summary</strong> <br />
+                <!-- prettier-ignore -->
+                Order ID: {{order_instance.uuid|stringformat:"s"|slice:"-12:" }}
+                <br />Order Date: {{ order_instance.order_date|date:"F j, Y" }}
+                <br />Order Total: INR
+                {{total_order_amount_after_all_discount|floatformat:2}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Shipping Address</strong>
+                <br />{{order_instance.shipping_address.first_name}}
+                {{order_instance.shipping_address.last_name}}
+                <br />{{order_instance.shipping_address.address_line_1}}
+                <br />{{order_instance.shipping_address.city}}
+                <br />{{order_instance.shipping_address.post_code}}
+                <br />{{order_instance.shipping_address.region}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <table class="table table-bordered grand-total">
+            <tbody>
+              <tr>
+                <td class="text-right"><strong>Sub-Total:</strong></td>
+                <td class="text-right">
+                  INR {{total_order_amount_before_discount|floatformat:2}}
+                </td>
+              </tr>
+              {%if coupon_discount != 0 %}
+              <tr>
+                <td class="text-right"><strong>Coupon:</strong></td>
+                <td style="color: green" class="text-right">
+                  - INR {{ coupon_discount |floatformat:2 }}
+                </td>
+              </tr>
+              {%else%} {%endif%}
+              <tr>
+                <td class="text-right"><strong>Discount:</strong></td>
+                <td style="color: green" class="text-right">
+                  - INR{{ total_order_discount|floatformat:2}}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-right"><strong>Total:</strong></td>
+                <td class="text-right">
+                  INR {{total_order_amount_after_all_discount|floatformat:2}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <div class="w-11/12 lg:w-2/6 mx-auto">
+    <div
+      class="bg-gray-200 dark:bg-gray-700 h-1 flex items-center justify-between"
+    >
+      <div class="w-1/3 bg-indigo-700 h-1 flex items-center">
+        <div
+          class="bg-indigo-700 h-6 w-6 rounded-full shadow flex items-center justify-center"
+        >
+          <img
+            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/thin_with_steps-svg1.svg"
+            alt="check"
+          />
+        </div>
+      </div>
+      <div
+        class="w-1/3 flex justify-between bg-indigo-700 h-1 items-center relative"
+      >
+        <div class="absolute right-0 -mr-2">
+          <div
+            class="relative bg-white dark:bg-gray-800 shadow-lg px-2 py-1 rounded mt-16 -mr-12"
+          >
+            <svg
+              class="absolute top-0 -mt-1 w-full right-0 left-0 text-white dark:text-gray-800"
+              width="16px"
+              height="8px"
+              viewBox="0 0 16 8"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g
+                id="Page-1"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+              >
+                <g
+                  id="Progress-Bars"
+                  transform="translate(-322.000000, -198.000000)"
+                  fill="currentColor"
+                >
+                  <g id="Group-4" transform="translate(310.000000, 198.000000)">
+                    <polygon id="Triangle" points="20 0 28 8 12 8"></polygon>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <p
+              tabindex="0"
+              class="focus:outline-none text-indigo-700 dark:text-indigo-400 text-xs font-bold"
+            >
+              Step 3: Analyzing
+            </p>
+          </div>
+        </div>
+        <div
+          class="bg-indigo-700 h-6 w-6 rounded-full shadow flex items-center justify-center -ml-2"
+        >
+          <img
+            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/thin_with_steps-svg1.svg"
+            alt="check"
+          />
+        </div>
+        <div
+          class="bg-white dark:bg-gray-700 h-6 w-6 rounded-full shadow flex items-center justify-center -mr-3 relative"
+        >
+          <div class="h-3 w-3 bg-indigo-700 rounded-full"></div>
+        </div>
+      </div>
+      <div class="w-1/3 flex justify-end">
+        <div
+          class="bg-white dark:bg-gray-700 h-6 w-6 rounded-full shadow"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+version: "3"
+services:
+  fresh_harvest:
+    build:
+      context: ./fresh_harvest
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - fresh_harvest_data:/app/db
+      - ./fresh_harvest:/app
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - fresh_harvest
+
+volumes:
+  fresh_harvest_data:

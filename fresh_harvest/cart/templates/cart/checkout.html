@@ -1,0 +1,475 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+
+
+{% block for_common_body %}
+<form action="" method="post" id="checkout-form">
+    <div class="row">
+        <div id="content" class="col-sm-12 checkout" >
+            <div class="panel-group" id="accordion">
+
+                <!-- Checkout -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Checkout</h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="collapse-checkout-option">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Billing Details -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-payment-address" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle collapsed" aria-expanded="false">Step 1: Billing Details <i class="fa fa-caret-down"></i></a>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="collapse-payment-address" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            
+
+                                <!-- Existing Address -->
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="payment_address" value="existing" checked="checked">
+                                        I want to use an existing address
+                                    </label>
+                                </div>
+                                <div id="payment-existing">
+                                    {%if default_address%}
+                                    <select name="address_id" class="form-control">
+                                        <option value="{{default_address.id}}" selected="selected">{{default_address.first_name}}&nbsp;
+                                            {{default_address.last_name}}, {{default_address.address_line_1}}, {{default_address.city}},
+                                            {{default_address.region}}, India
+                                        </option>
+                                        {%for address in other_addresses%}
+                                        <option value="{{address.id}}">{{address.first_name}}&nbsp;{{address.last_name}}, {{address.address_line_1}},
+                                            {{address.city}}, {{address.region}}, India
+                                        </option>
+                                        {%endfor%}
+                                    </select>
+                                    {%else%}
+                                    <select name="address_id" class="form-control" disabled>
+                                    </select>
+                                    {%endif%}
+                                    
+                                </div>
+                                <input type="hidden" name="selected_address_type" id="id_selected_address_type" value="existing">
+                                
+
+                                <!-- New Address -->
+                                <div class="radio">
+                                    <label>
+                                    <input type="radio" name="payment_address" value="new">
+                                    I want to use a new address</label>
+                                    </div>
+                                <br>
+                                <!-- This form is after summition is send to the view in 'store' -->
+                                
+                                <div id="payment-new" style="display: none;">
+                                    <h2>Add Address</h2>
+                                    
+                                        {% csrf_token %}
+                                       
+                                            {% for field in form %}
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                                <div class="col-sm-10">
+                                                    {{ field }}
+                                                    <div>
+                                                        <p style="color: red;" id="{{ field.name }}ValidationError"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                </div>
+                                <div class="buttons clearfix">
+                                    <div class="pull-right">
+                                    <input type="button" value="Continue" id="button-payment-address" data-loading-text="Loading..." class="btn btn-primary">
+                                    </div>
+                                </div>
+
+                                
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    // Trigger the collapse functionality for Step 1 when the page loads
+                    $(document).ready(function() {
+                            $('#collapse-payment-address').collapse('show');
+                            SetFieldOptional()
+                        });
+                
+                    $('input[name=\'payment_address\']').on('change', function () {
+                        if (this.value == 'new') {
+                            $('#payment-existing').hide();
+                            $('#payment-new').show();
+                            // Set the selected address type to 'new'
+                            $('#id_selected_address_type').val('new');
+                        } else {
+                            $('#payment-existing').show();
+                            $('#payment-new').hide();
+                            // Set the selected address type to 'existing'
+                            $('#id_selected_address_type').val('existing');
+                        }
+                        
+                        // Call the function to toggle the required attribute of form fields in 'payment-new'
+                        toggleNewAddressFields();
+                    });
+                    function toggleNewAddressFields() {
+                        var newAddressRadio = document.querySelector('input[name="payment_address"][value="new"]');
+                        var form = document.getElementById('payment-new');
+                        var newAddressFields = form.querySelectorAll('input, select');
+
+                        newAddressFields.forEach(function(field) {
+                            // Check if the current field is one of the fields to exclude
+                            if (field.name !== 'default_address' && field.name !== 'address_line_2') {
+                                // Set the 'required' attribute based on the checked state of the newAddressRadio
+                                field.required = newAddressRadio.checked;
+                            }
+                        });
+                    }
+                    function SetFieldOptional() {
+                        var newAddressRadio = document.querySelector('input[name="payment_address"][value="new"]');
+                        var form = document.getElementById('payment-new');
+                        var newAddressFields = form.querySelectorAll('input, select');
+
+                        newAddressFields.forEach(function(field) {
+
+                            field.required = false;
+                            
+                        });
+                    }
+                </script>
+                
+                
+               
+                 <!-- Step 2: Confirm Order -->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-confirm-order" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle collapsed" aria-expanded="false">Step 2: Confirm Order <i class="fa fa-caret-down"></i></a>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="collapse-confirm-order" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-center">Image</td>
+                                            <td class="text-left">Product Name</td>
+                                            <td class="text-left">Quantity</td>
+                                            <td class="text-right">Unit Price</td>
+                                            <td class="text-right">Total</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart_items %}
+                                        <tr>
+                                            <td class="text-center">
+                                                <a href="{{item.product.get_absolute_url}}">
+                                                    <img height="50" width="50" src="{%static 'media/images/small/'|add:item.product.get_file_name %}" alt="{{item.product.title}}"  class="img-thumbnail">
+                                                </a>
+                                            </td>
+                                            <td class="text-left">
+                                                <a href="{{item.product.get_absolute_url}}">{{item.product.title}}</a>
+                                            </td>
+                                            <td class="text-left">
+                                                {{item.quantity}}
+                                            </td>
+                                            {%if product.get_discounted_price%}
+                                            <td class="text-right">
+                                                INR {{item.product.get_discounted_price}} <br>
+                                                <span style="font-size: smaller;"><strike style="color: gray;">INR {{item.product.price}}</strike>  <span style="color: green;">({{item.product.get_highest_discount_percentage}} %) </span> </span>
+                                                
+                                                <span class="price-tax"></span>
+                                            </td>
+                                            {%else%}
+                                            <td class="text-right">INR {{item.product.price}}</td>
+                                            {%endif%}
+                                            {%if product.get_discounted_price%}
+                                            <td class="text-right">
+                                                INR {{item.total_price_after_discount|floatformat:2}} <br>
+                                                <span style="font-size: smaller;"><strike style="color: gray;">
+                                                INR {{item.total_price_before_discount|floatformat:2}}</strike>  <span style="color: green;">({{item.product.get_highest_discount_percentage}} %) </span> </span>
+                                            </td>
+                                            {%else%}
+                                            <td class="text-right">INR {{item.total_price_after_discount|floatformat:2}}</td>
+                                            {%endif%}
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-sm-offset-8">
+                                <!-- Grand Total Table -->
+                                <table class="table table-bordered grand-total">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-right"><strong>Sub-Total:</strong></td>
+                                            <td  class="text-right"> INR {{grand_total_before_discount|floatformat:2}}</td>
+                                        </tr>
+                                        {%if user.cart.first.coupon %}
+                                        <tr>
+                                            <td class="text-right"><strong>Coupon:</strong></td>
+                                            <td style="color: green;" class="text-right">- INR {{ user.cart.first.coupon.discount_price |floatformat:2 }}</td>
+                                        </tr>
+                                        {%else%}
+                                        {%endif%}
+                                        <tr>
+                                            <td class="text-right"><strong>Discount:</strong></td>
+                                            <td style="color: green;" class="text-right">- INR {{total_promotional_discount|floatformat:2}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Total:</strong></td>
+                                            <td class="text-right">INR {{grand_total|floatformat:2}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="buttons clearfix">
+                                <div class="pull-right">
+                                    <input type="" value="Continue" id="button-order-confirm" data-loading-text="Loading..." class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+        
+                
+
+                <!-- Step 3: Payment Method -->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#collapse-payment-method" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle collapsed" aria-expanded="false">Step 3: Payment Method and Place Order<i class="fa fa-caret-down"></i></a>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse collapse" id="collapse-payment-method" aria-expanded="false" style="height: 0px;">
+                        <div class="panel-body">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="payment_method" value="cash_on_delivery" checked="checked">
+                                    Cash on Delivery 
+                                    {%if grand_total < 1000%}
+                                    <span class="text-danger"> (Not available on orders less than INR 1000) </span>
+                                    {%else%}
+                                    {%endif%}
+
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="payment_method" value="paypal">
+                                    PayPal
+                                </label>
+                                <div id="paypal-button-container" style="display: none;"></div> <!-- Hiden this div by default -->
+                            </div>
+                            
+                            <!-- a hidden input field to store the selected payment method -->
+                            <input type="hidden" name="selected_payment_method" id="selected-payment-method" value="cash_on_delivery" >
+
+                            <input type="hidden" name="payment_status" id="id_payment_status" value="" >
+                        </div>
+                
+                        <div class="buttons clearfix">
+                            <div class="pull-right">
+                                <input type="submit" value="Place COD" id="checkout-button" data-loading-text="Loading..." class="btn btn-primary"
+                                {%if grand_total < 1000%} disabled {%else%} {%endif%}>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <script>
+                        $(document).ready(function() {
+                            $('input[name="payment_method"]').on('change', function() {
+                                if (this.value === 'paypal') {
+                                    $('#paypal-button-container').show(); // Show PayPal div when PayPal radio button is selected
+                                    $('#checkout-button').hide();
+                                } else {
+                                    $('#paypal-button-container').hide(); // Hide PayPal div when other radio buttons are selected
+                                    $('#checkout-button').show();
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+                
+
+
+
+
+
+
+
+
+                   
+
+
+                        
+               
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    // Script for Step 1 Continue button
+                                    $('#button-payment-address').on('click', function() {
+                                        // Hide Step 1 div
+                                        $('#collapse-payment-address').collapse('hide');
+                    
+                                        // Show the next hidden div (Step 2: Confirm order)
+                                        $('#collapse-confirm-order').collapse('show'); 
+                                    });
+                    
+                                    // Script for updating the hidden input field in Step 2
+                                    $('input[name=\'payment_method\']').on('change', function() {
+                                        $('#selected-payment-method').val(this.value);
+                                    });
+                    
+                                    // Script for Step 2 Continue button
+                                    $('#button-order-confirm').on('click', function() { 
+                                        // Hide Step 2 div
+                                        $('#collapse-confirm-order').collapse('hide');
+                    
+                                        // Show the next hidden div (Step 3: Confirm Order)
+                                        $('#collapse-payment-method').collapse('show');
+                                    });
+                                });
+                            </script>
+
+                            <!-- This Scripts send all the htmx request at once thereby users can see the validation message at once-->
+                            <!-- And also move the screeen towards where the validation error has occured -->
+                            <script>
+                                document.getElementById('checkout-button').addEventListener('click', function() {
+                                    // Open the address field section
+                                    $('#collapse-payment-address').collapse('show');
+                                    // Move the focus to the address field section
+                                    document.getElementById('payment-new').scrollIntoView();
+                                    // Trigger blur event on each input field with hx-trigger="blur"
+                                    var inputs = document.querySelectorAll('[hx-trigger="blur"]');
+                                    inputs.forEach(function(input) {
+                                        input.dispatchEvent(new Event('blur'));
+                                    });
+                                });
+                            </script> 
+
+
+                            <script>
+                                $('input[name=\'payment_address\']').on('change', function () {
+                                    if (this.value == 'new') {
+                                        $('#payment-existing').hide();
+                                        $('#payment-new').show();
+                                        // Set the selected address type to 'new'
+                                        $('#id_selected_address_type').val('new');
+                                    } else {
+                                        $('#payment-existing').show();
+                                        $('#payment-new').hide();
+                                        // Set the selected address type to 'existing'
+                                        $('#id_selected_address_type').val('existing');
+                                    }
+                                    
+                                    // Call the function to toggle the required attribute of form fields in 'payment-new'
+                                    toggleNewAddressFields();
+                                });
+                            </script>
+
+
+
+                <script src="https://www.paypal.com/sdk/js?client-id=Acx1FmvjyeSV9_Szvgt0UpA4g02J3JoEV7-mABFR5jX3V4GP7Ef6c4_SurUEJult4U9IIkkpNQEH6CX3&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+                <script>
+
+                    var total = '{{ grand_total }}';
+
+                    const paypalButtonsComponent = paypal.Buttons({
+                       // optional styling for buttons
+                       // https://developer.paypal.com/docs/checkout/standard/customize/buttons-style-guide/
+                       style: {
+                         color: "gold",
+                         shape: "rect",
+                         layout: "vertical"
+                       },
+               
+                       // set up the transaction
+                       createOrder: (data, actions) => {
+                           // pass in any options from the v2 orders create call:
+                           // https://developer.paypal.com/api/orders/v2/#orders-create-request-body
+
+                           const dividedTotal = parseFloat(total) / 80;
+
+                           const createOrderPayload = {
+                               purchase_units: [
+                                   {
+                                       amount: {
+                                           value: dividedTotal.toFixed(2)
+                                       }
+                                   }
+                               ]
+                           };
+               
+                           return actions.order.create(createOrderPayload);
+                       },
+               
+                       // finalize the transaction
+                       onApprove: (data, actions) => {
+                           const captureOrderHandler = (details) => {
+                               const payerName = details.payer.name.given_name;
+                                
+                               const paymentStatus = details.status; 
+
+                                if (paymentStatus === 'COMPLETED') {
+                                    document.getElementById('id_payment_status').value = 'Completed';
+
+                                } else if (paymentStatus === 'PENDING') { 
+                                    document.getElementById('id_payment_status').value = 'Pending';
+
+                                } else {
+                                    document.getElementById('id_payment_status').value = 'Failed'; 
+                                }
+
+
+                               document.getElementById('checkout-form').submit();
+               
+               
+                           };
+               
+                           return actions.order.capture().then(captureOrderHandler);
+                       },
+               
+                       // handle unrecoverable errors
+                       onError: (err) => {
+                           console.error('An error prevented the buyer from checking out with PayPal');
+                           alert("The payment was not completed")
+               
+                 
+               
+                       }
+                   });
+               
+                   paypalButtonsComponent
+                       .render("#paypal-button-container")
+                       .catch((err) => {
+                           console.error('PayPal Buttons failed to render');
+                       });
+               
+               </script>
+               
+                    
+                </div>
+                
+
+       
+            </div>
+        </div>
+    </div>
+   
+</form>
+{% endblock %}
+
+

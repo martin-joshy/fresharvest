@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>hello</h1>
+    <img height="50" width="50" src="{%static 'media/images/small/'%}{{product.get_file_name}}" alt="">
+    <img height="50" width="50" src="{%static 'media/images/medium/'%}{{product.get_file_name}}" alt="">
+    <h1>{{product.title}}</h1>
+</body>
+</html>
